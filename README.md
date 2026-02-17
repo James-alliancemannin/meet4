@@ -7,7 +7,7 @@ Casual local hangouts — real people, zero pressure.
 ## Current Status (February 2026)
 
 - **Landing page**: Live static site with splash animation  
-  Preview: https://yourusername.github.io/meet4/landing/index.html
+  Preview:  https://James-alliancemannin.github.io/meet4/landing/index.html
   (meet4.com coming soon)
 
 - **Mobile apps**: Planned (iOS + Android) — not started yet  
@@ -35,7 +35,7 @@ Future planned folders (empty for now):
 
 ## Live Site
 
-- GitHub Pages preview: https://James-alliancemannin.github.io/meet4/landing/  
+- GitHub Pages preview: https://James-alliancemannin.github.io/meet4/landing/index.html
 Update README.me
 
 - Planned production URL: https://meet4.com
