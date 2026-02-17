@@ -6,7 +6,7 @@
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
   
-  <!-- Tailwind CDN -->
+  <!-- Tailwind CDN (for dev only - see note at bottom) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -29,7 +29,7 @@
   <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
-  <!-- Supabase JS client -->
+  <!-- Supabase JS client (for sign-up form) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -54,6 +54,18 @@
       height: 100%;
       object-fit: contain;
     }
+    #skip-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10000;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.3);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -71,6 +83,8 @@
       <source src="meet4.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
+    <!-- Skip button for testing -->
+    <button id="skip-btn" onclick="closeSplash('manual skip')">Skip Intro</button>
   </div>
 
   <!-- Main content -->
@@ -182,7 +196,7 @@
       </div>
     </section>
 
-    <!-- Features (unchanged) -->
+    <!-- Features -->
     <section class="py-20 md:py-28 bg-neutral">
       <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
@@ -195,7 +209,7 @@
             <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
             <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
           </div>
-          <!-- ... the other 5 feature cards here — copy from your previous version if needed ... -->
+          <!-- Add the other 5 feature cards here if missing - copy from previous versions -->
         </div>
       </div>
     </section>
@@ -239,108 +253,76 @@
 
   </div>
 
-  <!-- JavaScript: Supabase + fixed splash logic -->
+  <!-- JavaScript: fixed splash + sign-up -->
   <script>
-    // === Supabase Config (replace these!) ===
-    const SUPABASE_URL = 'https://your-project-ref.supabase.co';      // ← YOUR URL
-    const SUPABASE_ANON_KEY = 'your-anon-public-key';                // ← YOUR ANON KEY
-
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Sign-up function
-    async function signUp() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-      const errorEl = document.getElementById('error-message');
-      const successEl = document.getElementById('success-message');
-      const form = document.getElementById('signup-form');
-
-      errorEl.style.display = 'none';
-      successEl.style.display = 'none';
-
-      if (!email || !password) {
-        errorEl.textContent = 'Please enter email and password';
-        errorEl.style.display = 'block';
-        return;
-      }
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.origin + '/landing/'
-        }
-      });
-
-      if (error) {
-        errorEl.textContent = error.message || 'Sign up failed — try again';
-        errorEl.style.display = 'block';
-        console.error('Sign-up error:', error);
-      } else {
-        form.style.display = 'none';
-        successEl.style.display = 'block';
-        console.log('Sign-up success - check email');
-      }
-    }
-
-    // === Splash close logic - fixed & robust ===
+    // Splash control - robust version
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
     const video = document.getElementById('introVideo');
 
     function closeSplash(source = 'unknown') {
-      console.log(`closeSplash called from: ${source}`);
+      console.log(`closeSplash triggered from: ${source}`);
       if (splash) splash.classList.add('hidden');
       if (mainContent) mainContent.classList.remove('hidden');
       if (video) video.pause();
     }
 
     if (video) {
-      // Primary end trigger
-      video.onended = () => closeSplash('onended');
+      video.onended = () => closeSplash('video.onended');
 
-      // Backup: timeupdate near end
       video.addEventListener('timeupdate', () => {
         if (video.duration && video.currentTime >= video.duration - 0.5) {
           closeSplash('timeupdate near end');
         }
       });
 
-      // Fallback after duration + buffer
       video.addEventListener('loadedmetadata', () => {
-        const duration = video.duration || 8; // default if unknown
+        const duration = video.duration || 8;
         setTimeout(() => {
           if (!splash.classList.contains('hidden')) {
-            closeSplash('duration fallback');
+            closeSplash('loadedmetadata fallback');
           }
         }, (duration * 1000) + 3000);
       });
     }
 
-    // Click/tap anywhere on splash to skip
+    // Click / tap to skip
     if (splash) {
       splash.addEventListener('click', () => closeSplash('click'));
-      splash.addEventListener('touchend', () => closeSplash('touch')); // mobile tap
+      splash.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        closeSplash('touchend');
+      });
     }
 
-    // Any key press to skip
+    // Keypress to skip
     document.addEventListener('keydown', (e) => {
       if (!splash.classList.contains('hidden')) {
         closeSplash('keydown');
       }
     });
 
-    // Ultimate fallback: 20s max
+    // Ultimate fallback - 20 seconds max
     setTimeout(() => {
       if (!splash.classList.contains('hidden')) {
-        closeSplash('ultimate fallback 20s');
+        closeSplash('ultimate 20s fallback');
       }
     }, 20000);
 
-    console.log('Splash script loaded - waiting for video/events');
-  </script>
+    console.log('Splash script initialized - waiting for events');
 
-<!-- nudge -->
+    // === Supabase sign-up (placeholder - add real keys to activate) ===
+    // const SUPABASE_URL = 'https://your-project-ref.supabase.co';
+    // const SUPABASE_ANON_KEY = 'your-anon-public-key';
+    // const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function signUp() {
+      // Placeholder - replace with real sb.auth.signUp when keys are added
+      alert('Sign-up ready! Add your Supabase keys to enable real accounts.');
+      document.getElementById('signup-form').style.display = 'none';
+      document.getElementById('success-message').style.display = 'block';
+    }
+  </script>
 
 </body>
 </html>
