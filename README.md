@@ -2,7 +2,7 @@
 
 Casual local hangouts — real people, zero pressure.
 
-**meet4** is a simple platform for discovering and creating low-key, in-person meetups in your neighborhood: walks, coffee runs, board games, park workouts, quiet reading spots, and more. No endless scrolling, no hookup focus — just small groups showing up and connecting.
+**meet4** is a simple platform for discovering and creating genuine, in-person meetups in your neighborhood: walks, coffee runs, board games, park workouts, quiet reading spots, and more. No endless scrolling, no hookup focus — just real people showing up and connecting.
 
 ## Current Status (February 2026)
 
@@ -16,7 +16,7 @@ Casual local hangouts — real people, zero pressure.
 ## Folder Structure
 
 meet4/
-├── landing/                    # Static landing page -current live version
+├── landing/                    # Static landing page -current live version 
 
 │   ├── index.html              # Main page with video splash + content
 
@@ -35,8 +35,8 @@ Future planned folders (empty for now):
 
 ## Live Site
 
-- GitHub Pages preview: https://yourusername.github.io/meet4/landing/  
-  (Replace `yourusername` with your actual GitHub username)
+- GitHub Pages preview: https://James-alliancemannin.github.io/meet4/landing/  
+Update README.me
 
 - Planned production URL: https://meet4.com
 
