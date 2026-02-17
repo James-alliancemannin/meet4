@@ -6,7 +6,7 @@
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
   
-  <!-- Tailwind CDN (for dev only - see note at bottom) -->
+  <!-- Tailwind CDN (dev only) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -28,9 +28,6 @@
 
   <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-
-  <!-- Supabase JS client (for sign-up form) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
@@ -56,22 +53,26 @@
     }
     #skip-btn {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10000;
-      padding: 8px 16px;
-      background: rgba(255,255,255,0.3);
+      bottom: 30px;
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.25);
       color: white;
-      border: none;
-      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 9999px;
+      font-weight: 500;
       cursor: pointer;
+      z-index: 10000;
+      transition: all 0.2s;
+    }
+    #skip-btn:hover {
+      background: rgba(255,255,255,0.4);
     }
   </style>
 </head>
 
 <body class="bg-neutral text-textDark antialiased">
 
-  <!-- Splash screen / intro video -->
+  <!-- Splash screen -->
   <div id="splash">
     <video 
       id="introVideo"
@@ -83,11 +84,11 @@
       <source src="meet4.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <!-- Skip button for testing -->
-    <button id="skip-btn" onclick="closeSplash('manual skip')">Skip Intro</button>
+    <!-- Visible skip button for testing -->
+    <button id="skip-btn">Skip Intro</button>
   </div>
 
-  <!-- Main content -->
+  <!-- Main content (starts hidden) -->
   <div id="main-content" class="hidden">
 
     <!-- Hero -->
@@ -120,7 +121,7 @@
       </div>
     </header>
 
-    <!-- Sign-up Form -->
+    <!-- Sign-up Form (placeholder - Supabase keys needed to activate) -->
     <section class="py-16 bg-white">
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
@@ -129,7 +130,7 @@
             Create an account today — even in early beta, you'll be first to access real local hangs.
           </p>
 
-          <form id="signup-form" onsubmit="event.preventDefault(); signUp();">
+          <form id="signup-form" onsubmit="event.preventDefault(); alert('Sign-up ready! Add Supabase keys to enable.');">
             <div class="mb-5">
               <label for="email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
               <input 
@@ -158,11 +159,6 @@
               Create account
             </button>
           </form>
-
-          <p id="success-message" style="display:none;" class="text-center text-green-600 mt-6 font-medium text-lg">
-            Check your email to confirm your account!
-          </p>
-          <p id="error-message" style="display:none;" class="text-center text-red-600 mt-4 text-sm"></p>
 
           <p class="text-center text-sm text-textMuted mt-6">
             Already have an account? <a href="#" class="text-primary hover:underline">Log in</a> (coming soon)
@@ -209,7 +205,7 @@
             <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
             <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
           </div>
-          <!-- Add the other 5 feature cards here if missing - copy from previous versions -->
+          <!-- Repeat for the other 5 cards as in your original -->
         </div>
       </div>
     </section>
@@ -253,75 +249,72 @@
 
   </div>
 
-  <!-- JavaScript: fixed splash + sign-up -->
+  <!-- JavaScript: fixed splash close (no Supabase crash) -->
   <script>
-    // Splash control - robust version
+    // Splash control - super reliable version
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
     const video = document.getElementById('introVideo');
+    const skipBtn = document.getElementById('skip-btn');
 
     function closeSplash(source = 'unknown') {
-      console.log(`closeSplash triggered from: ${source}`);
+      console.log(`Splash closing from: ${source}`);
       if (splash) splash.classList.add('hidden');
       if (mainContent) mainContent.classList.remove('hidden');
       if (video) video.pause();
     }
 
+    // Video end triggers
     if (video) {
-      video.onended = () => closeSplash('video.onended');
-
+      video.onended = () => closeSplash('video ended');
+      
+      // Near-end detection
       video.addEventListener('timeupdate', () => {
         if (video.duration && video.currentTime >= video.duration - 0.5) {
           closeSplash('timeupdate near end');
         }
       });
 
+      // Duration fallback
       video.addEventListener('loadedmetadata', () => {
         const duration = video.duration || 8;
         setTimeout(() => {
           if (!splash.classList.contains('hidden')) {
-            closeSplash('loadedmetadata fallback');
+            closeSplash('duration fallback');
           }
-        }, (duration * 1000) + 3000);
+        }, (duration * 1000) + 4000);
       });
     }
 
-    // Click / tap to skip
+    // Click / tap anywhere on splash
     if (splash) {
       splash.addEventListener('click', () => closeSplash('click'));
       splash.addEventListener('touchend', (e) => {
         e.preventDefault();
-        closeSplash('touchend');
+        closeSplash('touch');
       });
     }
 
-    // Keypress to skip
-    document.addEventListener('keydown', (e) => {
+    // Skip button
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => closeSplash('skip button'));
+    }
+
+    // Key press anywhere
+    document.addEventListener('keydown', () => {
       if (!splash.classList.contains('hidden')) {
         closeSplash('keydown');
       }
     });
 
-    // Ultimate fallback - 20 seconds max
+    // Max 25s fallback
     setTimeout(() => {
       if (!splash.classList.contains('hidden')) {
-        closeSplash('ultimate 20s fallback');
+        closeSplash('max timeout 25s');
       }
-    }, 20000);
+    }, 25000);
 
-    console.log('Splash script initialized - waiting for events');
-
-    // === Supabase sign-up (placeholder - add real keys to activate) ===
-    // const SUPABASE_URL = 'https://your-project-ref.supabase.co';
-    // const SUPABASE_ANON_KEY = 'your-anon-public-key';
-    // const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function signUp() {
-      // Placeholder - replace with real sb.auth.signUp when keys are added
-      alert('Sign-up ready! Add your Supabase keys to enable real accounts.');
-      document.getElementById('signup-form').style.display = 'none';
-      document.getElementById('success-message').style.display = 'block';
-    }
+    console.log('Splash script loaded - ready to close on events');
   </script>
 
 </body>
