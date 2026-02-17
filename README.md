@@ -7,8 +7,8 @@ Casual local hangouts — real people, zero pressure.
 ## Current Status (February 2026)
 
 - **Landing page**: Live static site with splash animation  
-  Preview: https://yourusername.github.io/meet4/landing/  
-  (Custom domain meet4.com coming soon)
+  Preview: https://yourusername.github.io/meet4/landing/index.html
+  (meet4.com coming soon)
 
 - **Mobile apps**: Planned (iOS + Android) — not started yet  
 - **Backend**: Planned (Supabase for auth, events, location queries)
