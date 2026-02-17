@@ -16,11 +16,16 @@ Casual local hangouts — real people, zero pressure.
 ## Folder Structure
 
 meet4/
-├── landing/                    # Static landing page (current live version)
+├── landing/                    # Static landing page -current live version
+
 │   ├── index.html              # Main page with video splash + content
+
 │   ├── logo.jpg                # Logo with white background
+
 │   └── meet4.mp4               # Animated logo intro video
+
 ├── README.md                   # This file
+
 └── .gitignore                  # Standard ignores
 
 Future planned folders (empty for now):
