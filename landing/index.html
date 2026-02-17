@@ -157,20 +157,97 @@
       </div>
     </section>
 
-    <!-- Pain points, Features, CTA, Footer unchanged -->
-    <!-- ... paste your existing sections here if needed ... -->
+    <!-- Pain points -->
+    <section class="py-20 md:py-28 bg-white">
+      <div class="max-w-5xl mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-12">Connection shouldn’t feel this hard</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8 text-left">
+          <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
+            <p class="text-xl font-medium mb-4">Done with endless scrolling</p>
+            <p class="text-textMuted">Friends busy, apps feel empty, another night alone on the couch.</p>
+          </div>
+          <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
+            <p class="text-xl font-medium mb-4">Bars & events aren’t always it</p>
+            <p class="text-textMuted">Loud, expensive, hookup-focused — not everyone wants that every time.</p>
+          </div>
+          <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
+            <p class="text-xl font-medium mb-4">Looking for something else?</p>
+            <p class="text-textMuted">
+              Someone (or a few someones?) to walk with, grab tea, talk, connect — regularly, locally.<br>
+              Look no further.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features (unchanged) -->
+    <section class="py-20 md:py-28 bg-neutral">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
+              🗺️
+            </div>
+            <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
+            <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
+          </div>
+          <!-- ... the other 5 feature cards here — copy from your previous version if needed ... -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="get-started" class="py-24 md:py-32 bg-gradient-to-br from-primary to-accent text-white text-center">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
+          Start meeting people where you live
+        </h2>
+        <p class="text-xl md:text-2xl mb-10 opacity-90">
+          Download the app or sign up on web — your first hang could be this weekend.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row justify-center gap-6">
+          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">
+            Get on iOS (coming soon)
+          </a>
+          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">
+            Get on Android (coming soon)
+          </a>
+        </div>
+        
+        <p class="mt-10 text-lg opacity-90">
+          Or <a href="#" class="underline hover:opacity-100">create an account on web</a> and start browsing now.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-textDark text-gray-300 py-12 text-center text-sm">
+      <div class="max-w-7xl mx-auto px-6">
+        <p>© 2026 meet4. All rights reserved.</p>
+        <div class="mt-4 space-x-6">
+          <a href="/privacy" class="hover:text-accent transition">Privacy</a>
+          <a href="/terms" class="hover:text-accent transition">Terms</a>
+          <a href="/contact" class="hover:text-accent transition">Contact</a>
+        </div>
+      </div>
+    </footer>
 
   </div>
 
-  <!-- JavaScript: Supabase + improved splash -->
+  <!-- JavaScript: Supabase + fixed splash logic -->
   <script>
-    // === Supabase Config ===
-    const SUPABASE_URL = 'https://your-project-ref.supabase.co';      // ← REPLACE
-    const SUPABASE_ANON_KEY = 'your-anon-public-key';                // ← REPLACE
+    // === Supabase Config (replace these!) ===
+    const SUPABASE_URL = 'https://your-project-ref.supabase.co';      // ← YOUR URL
+    const SUPABASE_ANON_KEY = 'your-anon-public-key';                // ← YOUR ANON KEY
 
-    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Sign-up function (unchanged)
+    // Sign-up function
     async function signUp() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
@@ -198,76 +275,69 @@
       if (error) {
         errorEl.textContent = error.message || 'Sign up failed — try again';
         errorEl.style.display = 'block';
-        console.error(error);
+        console.error('Sign-up error:', error);
       } else {
         form.style.display = 'none';
         successEl.style.display = 'block';
+        console.log('Sign-up success - check email');
       }
     }
 
-    // === Improved Splash Control ===
+    // === Splash close logic - fixed & robust ===
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
     const video = document.getElementById('introVideo');
 
-    function closeSplash() {
-      console.log('Closing splash');
+    function closeSplash(source = 'unknown') {
+      console.log(`closeSplash called from: ${source}`);
       if (splash) splash.classList.add('hidden');
       if (mainContent) mainContent.classList.remove('hidden');
       if (video) video.pause();
     }
 
     if (video) {
-      video.onended = () => {
-        console.log('Video ended');
-        closeSplash();
-      };
+      // Primary end trigger
+      video.onended = () => closeSplash('onended');
 
-      // Fallback: close after estimated duration + buffer
+      // Backup: timeupdate near end
+      video.addEventListener('timeupdate', () => {
+        if (video.duration && video.currentTime >= video.duration - 0.5) {
+          closeSplash('timeupdate near end');
+        }
+      });
+
+      // Fallback after duration + buffer
       video.addEventListener('loadedmetadata', () => {
-        const duration = video.duration || 10;
+        const duration = video.duration || 8; // default if unknown
         setTimeout(() => {
           if (!splash.classList.contains('hidden')) {
-            console.log('Video duration fallback');
-            closeSplash();
+            closeSplash('duration fallback');
           }
         }, (duration * 1000) + 3000);
       });
-
-      // Also listen for timeupdate as backup
-      video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= video.duration - 0.5) {
-          console.log('Timeupdate near end');
-          closeSplash();
-        }
-      });
     }
 
-    // Click to skip
+    // Click/tap anywhere on splash to skip
     if (splash) {
-      splash.addEventListener('click', () => {
-        console.log('Click skip');
-        closeSplash();
-      });
+      splash.addEventListener('click', () => closeSplash('click'));
+      splash.addEventListener('touchend', () => closeSplash('touch')); // mobile tap
     }
 
-    // Key press to skip
+    // Any key press to skip
     document.addEventListener('keydown', (e) => {
       if (!splash.classList.contains('hidden')) {
-        console.log('Key skip');
-        closeSplash();
+        closeSplash('keydown');
       }
     });
 
-    // Ultimate fallback: 20 seconds max
+    // Ultimate fallback: 20s max
     setTimeout(() => {
       if (!splash.classList.contains('hidden')) {
-        console.log('Ultimate fallback');
-        closeSplash();
+        closeSplash('ultimate fallback 20s');
       }
     }, 20000);
 
-    // nudge
+    console.log('Splash script loaded - waiting for video/events');
   </script>
 
 <!-- nudge -->
