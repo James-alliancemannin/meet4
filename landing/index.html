@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
-
-  <!-- Tailwind CDN (prototype; compile for production) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -25,16 +23,11 @@
       }
     }
   </script>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
-
-    /* Splash */
     #splash {
       position: fixed; inset: 0; z-index: 9999;
       background: #111827; display: flex; align-items: center; justify-content: center;
@@ -42,49 +35,30 @@
     }
     #splash.hidden { opacity: 0; pointer-events: none; }
     #splash video { width: 100%; height: 100%; object-fit: contain; }
-
     #skip-btn {
       position: absolute; bottom: 30px; padding: 12px 24px;
       background: rgba(255,255,255,0.25); color: white;
       border: 1px solid rgba(255,255,255,0.4); border-radius: 9999px;
       font-weight: 500; cursor: pointer; z-index: 10000; transition: all 0.2s;
     }
-    #skip-btn:hover, #skip-btn:focus {
-      background: rgba(255,255,255,0.4);
-      outline: 2px solid #10b981; outline-offset: 2px;
-    }
-
-    /* Status */
+    #skip-btn:hover, #skip-btn:focus { background: rgba(255,255,255,0.4); outline: 2px solid #10b981; outline-offset: 2px; }
     .status {
       margin-top: 14px; padding: 10px 12px; border-radius: 12px;
       font-size: 0.95rem; line-height: 1.3; display: none;
     }
-    .status.ok   { display:block; background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.35); }
-    .status.err  { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
-    .status.info { display:block; background:#eff6ff; color:#1e3a8a; border:1px solid rgba(59,130,246,.25); }
-
+    .status.ok    { display:block; background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.35); }
+    .status.err   { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
+    .status.info  { display:block; background:#eff6ff; color:#1e3a8a; border:1px solid rgba(59,130,246,.25); }
     button[disabled] { opacity:.65; cursor:not-allowed; }
-
-    @media (prefers-reduced-motion: reduce) {
-      #splash { transition: none; }
-    }
+    @media (prefers-reduced-motion: reduce) { #splash { transition: none; } }
   </style>
 </head>
-
 <body class="bg-neutral text-textDark antialiased">
+
   <!-- Splash -->
   <div id="splash">
-    <video
-      id="introVideo"
-      autoplay
-      muted
-      playsinline
-      preload="metadata"
-      poster="splash-poster.jpg"
-      aria-label="meet4 intro video"
-    >
+    <video id="introVideo" autoplay muted playsinline poster="splash-poster.jpg" aria-label="meet4 intro video">
       <source src="meet4.mp4" type="video/mp4">
-      Your browser does not support the video tag.
     </video>
     <button id="skip-btn" type="button" aria-label="Skip introduction video">Skip Intro</button>
   </div>
@@ -95,41 +69,23 @@
     <!-- Hero -->
     <header class="relative bg-white">
       <div class="max-w-7xl mx-auto px-6 py-24 md:py-32 lg:py-40 text-center">
-        <img
-          src="logo.jpg"
-          alt="meet4 logo"
-          class="mx-auto h-64 md:h-80 lg:h-96 w-auto mb-10 object-contain"
-        />
-
+        <img src="logo.jpg" alt="meet4 logo" class="mx-auto h-64 md:h-80 lg:h-96 w-auto mb-10 object-contain" />
         <p class="text-xl md:text-2xl lg:text-3xl text-textMuted max-w-4xl mx-auto leading-relaxed font-medium">
           Casual hangouts happening near you — right now.
         </p>
         <p class="mt-6 text-lg md:text-xl text-textMuted max-w-3xl mx-auto">
-          Walks, coffee runs, board games, park workouts, quiet reading spots.
-          Small groups, real people, zero pressure. Just show up and see who’s around.
+          Walks, coffee runs, board games, park workouts, quiet reading spots. Small groups, real people, zero pressure. Just show up and see who’s around.
         </p>
-
         <div class="mt-12 flex flex-col sm:flex-row justify-center gap-5">
-          <a
-            href="#get-started"
-            class="inline-flex items-center px-10 py-5 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg hover:shadow-xl text-xl"
-          >
+          <a href="#get-started" class="inline-flex items-center px-10 py-5 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg hover:shadow-xl text-xl">
             Find hangs near me →
           </a>
-          <a
-            href="#auth"
-            class="inline-flex items-center px-10 py-5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-accentSoft transition text-xl"
-          >
+          <a href="#auth" class="inline-flex items-center px-10 py-5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-accentSoft transition text-xl">
             Host something simple
           </a>
         </div>
-
-        <!-- Already logged in -->
         <div id="already-logged-in" class="hidden mt-8">
-          <a
-            href="./app.html"
-            class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl"
-          >
+          <a href="./app.html" class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl">
             Go to the app →
           </a>
           <p id="logged-in-as" class="mt-3 text-sm text-textMuted"></p>
@@ -142,108 +98,45 @@
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
           <h3 class="text-2xl font-bold text-center mb-6">Join the beta now</h3>
-          <p class="text-center text-textMuted mb-8">
-            Create an account today — even in early beta, you'll be first to access real local hangs.
-          </p>
+          <p class="text-center text-textMuted mb-8">Create an account today — even in early beta, you'll be first to access real local hangs.</p>
 
-          <!-- Tabs -->
           <div class="flex gap-3 mb-6">
-            <button
-              id="tab-signup"
-              type="button"
-              class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              Create account
-            </button>
-            <button
-              id="tab-login"
-              type="button"
-              class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              Log in
-            </button>
+            <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">Create account</button>
+            <button id="tab-login" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary">Log in</button>
           </div>
 
-          <!-- Forgot password -->
           <p class="text-center text-sm mb-6">
-            <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">
-              Forgot your password?
-            </button>
+            <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">Forgot your password?</button>
           </p>
 
-          <!-- SIGN UP -->
+          <!-- SIGN UP FORM -->
           <form id="signup-form" autocomplete="on" novalidate>
             <div class="mb-5">
               <label for="signup-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
-              <input
-                type="email"
-                id="signup-email"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="you@example.com"
-                autocomplete="email"
-              />
+              <input type="email" id="signup-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
             </div>
             <div class="mb-6">
               <label for="signup-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
-              <input
-                type="password"
-                id="signup-password"
-                required
-                minlength="6"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="At least 6 characters"
-                autocomplete="new-password"
-              />
+              <input type="password" id="signup-password" required minlength="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="At least 6 characters" autocomplete="new-password" />
             </div>
-            <button
-              id="signup-btn"
-              type="submit"
-              class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg"
-            >
-              Create account
-            </button>
+            <button id="signup-btn" type="submit" class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg">Create account</button>
           </form>
 
-          <!-- LOGIN -->
+          <!-- LOGIN FORM -->
           <form id="login-form" class="hidden" autocomplete="on" novalidate>
             <div class="mb-5">
               <label for="login-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
-              <input
-                type="email"
-                id="login-email"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="you@example.com"
-                autocomplete="email"
-              />
+              <input type="email" id="login-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
             </div>
             <div class="mb-6">
               <label for="login-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
-              <input
-                type="password"
-                id="login-password"
-                required
-                minlength="6"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Your password"
-                autocomplete="current-password"
-              />
+              <input type="password" id="login-password" required minlength="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your password" autocomplete="current-password" />
             </div>
-            <button
-              id="login-btn"
-              type="submit"
-              class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg"
-            >
-              Log in
-            </button>
+            <button id="login-btn" type="submit" class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg">Log in</button>
           </form>
 
           <div id="auth-status" class="status info mt-6"></div>
-
-          <p class="text-center text-sm text-textMuted mt-6">
-            Tip: If you just created an account, you may need to confirm your email first.
-          </p>
+          <p class="text-center text-sm text-textMuted mt-6">Tip: If you just created an account, you may need to confirm your email first.</p>
         </div>
       </div>
     </section>
@@ -252,24 +145,18 @@
     <section class="py-20 md:py-28 bg-white">
       <div class="max-w-5xl mx-auto px-6 text-center">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-12">Connection shouldn’t feel this hard</h2>
-
         <div class="grid md:grid-cols-3 gap-8 text-left">
           <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
             <p class="text-xl font-medium mb-4">Done with endless scrolling</p>
             <p class="text-textMuted">Friends busy, apps feel empty, another night alone on the couch.</p>
           </div>
-
           <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
             <p class="text-xl font-medium mb-4">Bars & events aren’t always it</p>
             <p class="text-textMuted">Loud, expensive, hookup-focused — not everyone wants that every time.</p>
           </div>
-
           <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
             <p class="text-xl font-medium mb-4">Looking for something else?</p>
-            <p class="text-textMuted">
-              Someone (or a few someones?) to walk with, grab tea, talk, connect — regularly, locally.<br>
-              Look no further.
-            </p>
+            <p class="text-textMuted">Someone (or a few someones?) to walk with, grab tea, talk, connect — regularly, locally.<br>Look no further.</p>
           </div>
         </div>
       </div>
@@ -279,38 +166,32 @@
     <section class="py-20 md:py-28 bg-neutral">
       <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
-
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🗺️</div>
             <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
             <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
           </div>
-
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">➕</div>
             <h3 class="text-2xl font-semibold mb-4">Host in 30 seconds</h3>
             <p class="text-textMuted">Pick spot, time, activity. Public or invite-only. No long forms.</p>
           </div>
-
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🤝</div>
             <h3 class="text-2xl font-semibold mb-4">Vetted & kind-first</h3>
             <p class="text-textMuted">DM approval for private groups. Report/block easy. Safe & welcoming.</p>
           </div>
-
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🔄</div>
             <h3 class="text-2xl font-semibold mb-4">Build your circle</h3>
             <p class="text-textMuted">Recurring hangs appear automatically. Familiar faces, real friendships.</p>
           </div>
-
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">📱</div>
             <h3 class="text-2xl font-semibold mb-4">Mobile-first, simple</h3>
             <p class="text-textMuted">iOS & Android coming soon. Web works great right now.</p>
           </div>
-
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
             <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🌍</div>
             <h3 class="text-2xl font-semibold mb-4">Open to everyone</h3>
@@ -323,25 +204,13 @@
     <!-- Final CTA -->
     <section id="get-started" class="py-24 md:py-32 bg-gradient-to-br from-primary to-accent text-white text-center">
       <div class="max-w-5xl mx-auto px-6">
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
-          Start meeting people where you live
-        </h2>
-        <p class="text-xl md:text-2xl mb-10 opacity-90">
-          Download the app or sign up on web — your first hang could be this weekend.
-        </p>
-
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">Start meeting people where you live</h2>
+        <p class="text-xl md:text-2xl mb-10 opacity-90">Download the app or sign up on web — your first hang could be this weekend.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-6">
-          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">
-            Get on iOS (coming soon)
-          </a>
-          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">
-            Get on Android (coming soon)
-          </a>
+          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">Get on iOS (coming soon)</a>
+          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">Get on Android (coming soon)</a>
         </div>
-
-        <p class="mt-10 text-lg opacity-90">
-          Or <a href="#auth" class="underline hover:opacity-100">create an account / log in on web</a> and start browsing now.
-        </p>
+        <p class="mt-10 text-lg opacity-90">Or <a href="#auth" class="underline hover:opacity-100">create an account / log in on web</a> and start browsing now.</p>
       </div>
     </section>
 
@@ -361,20 +230,21 @@
 
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
   <script>
-    const SUPABASE_URL      = "https://hvzyndiuxivlwfjcvdls.supabase.co";
+    const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
 
-    const statusBox       = document.getElementById("auth-status");
-    const tabSignup       = document.getElementById("tab-signup");
-    const tabLogin        = document.getElementById("tab-login");
-    const signupForm      = document.getElementById("signup-form");
-    const loginForm       = document.getElementById("login-form");
-    const signupBtn       = document.getElementById("signup-btn");
-    const loginBtn        = document.getElementById("login-btn");
-    const forgotBtn       = document.getElementById("forgot-btn");
+    const statusBox = document.getElementById("auth-status");
+    const tabSignup = document.getElementById("tab-signup");
+    const tabLogin = document.getElementById("tab-login");
+    const signupForm = document.getElementById("signup-form");
+    const loginForm = document.getElementById("login-form");
+    const signupBtn = document.getElementById("signup-btn");
+    const loginBtn = document.getElementById("login-btn");
+    const forgotBtn = document.getElementById("forgot-btn");
     const alreadyLoggedIn = document.getElementById("already-logged-in");
-    const loggedInAs      = document.getElementById("logged-in-as");
+    const loggedInAs = document.getElementById("logged-in-as");
 
     function showStatus(type, msg) {
       statusBox.className = `status ${type}`;
@@ -383,33 +253,25 @@
     }
     function clearStatus() { statusBox.style.display = "none"; }
 
-    if (!window.supabase?.createClient) {
-      showStatus("err", "Supabase failed to load. Check your network/adblocker.");
-      signupBtn.disabled = true;
-      loginBtn.disabled = true;
-    }
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function getAppUrl()   { return new URL("app.html", window.location.href).href; }
+    function getAppUrl() { return new URL("app.html", window.location.href).href; }
     function getResetUrl() { return new URL("reset-password.html", window.location.href).href; }
 
     function setTab(isSignup) {
       clearStatus();
       signupForm.classList.toggle("hidden", !isSignup);
       loginForm.classList.toggle("hidden", isSignup);
-
       tabSignup.className = isSignup
         ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
         : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
-
-      tabLogin.className  = !isSignup
+      tabLogin.className = !isSignup
         ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
         : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
     }
 
     tabSignup.addEventListener("click", () => setTab(true));
-    tabLogin.addEventListener("click",  () => setTab(false));
+    tabLogin.addEventListener("click", () => setTab(false));
     setTab(true);
 
     // SIGN UP
@@ -418,7 +280,7 @@
       clearStatus();
       signupBtn.disabled = true;
 
-      const email    = document.getElementById("signup-email").value.trim();
+      const email = document.getElementById("signup-email").value.trim();
       const password = document.getElementById("signup-password").value;
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
@@ -427,7 +289,7 @@
         return;
       }
 
-      showStatus("info", "Creating account…");
+      showStatus("info", "Creating account and sending confirmation email…");
 
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -443,8 +305,8 @@
         return;
       }
 
-      console.log("Signup successful:", data);
-      showStatus("ok", "Account created! Check your email (including spam) to confirm.");
+      console.log("Signup success → email should be sent", data);
+      showStatus("ok", "Account created! Check your email (including spam) for the confirmation link.");
       setTab(false);
       document.getElementById("login-email").value = email;
     });
@@ -455,7 +317,7 @@
       clearStatus();
       loginBtn.disabled = true;
 
-      const email    = document.getElementById("login-email").value.trim();
+      const email = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value;
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
@@ -475,34 +337,25 @@
       }
 
       showStatus("ok", "Logged in! Redirecting…");
-      setTimeout(() => (window.location.href = "./app.html"), 600);
+      setTimeout(() => window.location.href = "./app.html", 600);
     });
 
-    // FORGOT PASSWORD
+    // FORGOT PASSWORD – user-friendly prompt
     forgotBtn.addEventListener("click", async () => {
       clearStatus();
-      const email =
-        document.getElementById("login-email").value.trim() ||
-        document.getElementById("signup-email").value.trim();
-
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        return showStatus("err", "Please enter a valid email address first.");
+      const email = prompt("Enter your email address:\n\nWe'll send a reset link if an account exists with us.");
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return showStatus("err", "Please enter a valid email address.");
       }
-
-      showStatus("info", "Sending password reset email…");
-
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getResetUrl()
-      });
-
+      showStatus("info", "Sending reset link if account exists…");
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: getResetUrl() });
       if (error) showStatus("err", error.message);
-      else showStatus("ok", "Reset email sent — check inbox and spam folder.");
+      else showStatus("ok", "If an account exists, a reset link has been sent. Check your inbox and spam.");
     });
 
-    // LOGGED-IN BANNER (async-safe)
+    // Logged-in banner
     async function refreshLoggedInBanner(_event, session) {
       const activeSession = session ?? (await supabase.auth.getSession()).data.session;
-
       if (activeSession?.user) {
         alreadyLoggedIn.classList.remove("hidden");
         loggedInAs.textContent = `Signed in as ${activeSession.user.email}`;
@@ -511,7 +364,6 @@
         loggedInAs.textContent = "";
       }
     }
-
     supabase.auth.onAuthStateChange(refreshLoggedInBanner);
     refreshLoggedInBanner();
   </script>
@@ -540,11 +392,8 @@
     splash?.addEventListener('click', () => closeSplash('click'));
     splash?.addEventListener('touchend', e => { e.preventDefault(); closeSplash('touch'); });
     skipBtn?.addEventListener('click', () => closeSplash('skip button'));
-
     document.addEventListener('keydown', e => {
-      if (!splash.classList.contains('hidden') && (e.key === 'Enter' || e.key === 'Escape')) {
-        closeSplash('keyboard');
-      }
+      if (!splash.classList.contains('hidden') && (e.key === 'Enter' || e.key === 'Escape')) closeSplash('keyboard');
     });
 
     setTimeout(() => {
@@ -553,5 +402,6 @@
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) closeSplash('reduced motion');
   </script>
+
 </body>
 </html>
