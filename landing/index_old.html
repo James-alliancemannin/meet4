@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
-  
+
   <!-- Tailwind CDN (dev only) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -31,6 +31,8 @@
 
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Splash */
     #splash {
       position: fixed;
       inset: 0;
@@ -42,15 +44,8 @@
       transition: opacity 0.8s ease-out;
       cursor: pointer;
     }
-    #splash.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #splash video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+    #splash.hidden { opacity: 0; pointer-events: none; }
+    #splash video { width: 100%; height: 100%; object-fit: contain; }
     #skip-btn {
       position: absolute;
       bottom: 30px;
@@ -64,11 +59,9 @@
       z-index: 10000;
       transition: all 0.2s;
     }
-    #skip-btn:hover {
-      background: rgba(255,255,255,0.4);
-    }
+    #skip-btn:hover { background: rgba(255,255,255,0.4); }
 
-    /* small utility for form status */
+    /* Auth status (no layout glitches) */
     .status {
       margin-top: 14px;
       padding: 10px 12px;
@@ -77,10 +70,11 @@
       line-height: 1.3;
       display: none;
     }
-    .status.ok { display:block; background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.35); }
-    .status.err { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
+    .status.ok   { display:block; background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.35); }
+    .status.err  { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
     .status.info { display:block; background:#eff6ff; color:#1e3a8a; border:1px solid rgba(59,130,246,.25); }
-    button[disabled] { opacity: .65; cursor: not-allowed; }
+
+    button[disabled] { opacity:.65; cursor:not-allowed; }
   </style>
 </head>
 
@@ -88,18 +82,11 @@
 
   <!-- Splash screen -->
   <div id="splash">
-    <video 
-      id="introVideo"
-      autoplay 
-      muted 
-      playsinline 
-      playbackRate="0.5"
-    >
+    <video id="introVideo" autoplay muted playsinline playbackRate="0.5">
       <source src="meet4.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <!-- Visible skip button for testing -->
-    <button id="skip-btn">Skip Intro</button>
+    <button id="skip-btn" type="button">Skip Intro</button>
   </div>
 
   <!-- Main content (starts hidden) -->
@@ -108,35 +95,45 @@
     <!-- Hero -->
     <header class="relative bg-white">
       <div class="max-w-7xl mx-auto px-6 py-24 md:py-32 lg:py-40 text-center">
-        <img 
-          src="logo.jpg" 
-          alt="meet4 logo" 
+        <img
+          src="logo.jpg"
+          alt="meet4 logo"
           class="mx-auto h-64 md:h-80 lg:h-96 w-auto mb-10 object-contain"
         />
-        
+
         <p class="text-xl md:text-2xl lg:text-3xl text-textMuted max-w-4xl mx-auto leading-relaxed font-medium">
           Casual hangouts happening near you — right now.
         </p>
         <p class="mt-6 text-lg md:text-xl text-textMuted max-w-3xl mx-auto">
-          Walks, coffee runs, board games, park workouts, quiet reading spots. 
+          Walks, coffee runs, board games, park workouts, quiet reading spots.
           Small groups, real people, zero pressure. Just show up and see who’s around.
         </p>
 
         <div class="mt-12 flex flex-col sm:flex-row justify-center gap-5">
-          <a href="#get-started" 
+          <a href="#get-started"
              class="inline-flex items-center px-10 py-5 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg hover:shadow-xl text-xl">
             Find hangs near me →
           </a>
-          <a href="#get-started" 
+          <a href="#auth"
              class="inline-flex items-center px-10 py-5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-accentSoft transition text-xl">
             Host something simple
           </a>
         </div>
+
+        <!-- Already logged in -->
+        <div id="already-logged-in" class="hidden mt-8">
+          <a href="./app.html"
+             class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl">
+            Go to the app →
+          </a>
+          <p id="logged-in-as" class="mt-3 text-sm text-textMuted"></p>
+        </div>
+
       </div>
     </header>
 
-    <!-- Sign-up Form (NOW ACTIVE with Supabase) -->
-    <section class="py-16 bg-white">
+    <!-- Auth (Create + Login) -->
+    <section class="py-16 bg-white" id="auth">
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
           <h3 class="text-2xl font-bold text-center mb-6">Join the beta now</h3>
@@ -144,29 +141,42 @@
             Create an account today — even in early beta, you'll be first to access real local hangs.
           </p>
 
-          <form id="signup-form">
+          <!-- Tabs -->
+          <div class="flex gap-3 mb-7">
+            <button id="tab-signup" type="button"
+              class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">
+              Create account
+            </button>
+            <button id="tab-login" type="button"
+              class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary">
+              Log in
+            </button>
+          </div>
+
+          <!-- SIGN UP FORM -->
+          <form id="signup-form" autocomplete="on" novalidate>
             <div class="mb-5">
-              <label for="email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                required 
+              <label for="signup-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
+              <input
+                type="email"
+                id="signup-email"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="you@example.com"
+                autocomplete="email"
               />
             </div>
             <div class="mb-6">
-              <label for="password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
-              <input 
-                type="password" 
-                id="password" 
-                required 
-                minlength="6"
+              <label for="signup-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
+              <input
+                type="password"
+                id="signup-password"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="At least 6 characters"
+                autocomplete="new-password"
               />
             </div>
-            <button 
+
+            <button
               id="signup-btn"
               type="submit"
               class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg"
@@ -175,10 +185,50 @@
             </button>
           </form>
 
-          <div id="signup-status" class="status info"></div>
+          <!-- LOGIN FORM -->
+          <form id="login-form" class="hidden" autocomplete="on" novalidate>
+            <div class="mb-5">
+              <label for="login-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
+              <input
+                type="email"
+                id="login-email"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="you@example.com"
+                autocomplete="email"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="login-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Your password"
+                autocomplete="current-password"
+              />
+            </div>
+
+            <button
+              id="login-btn"
+              type="submit"
+              class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg"
+            >
+              Log in
+            </button>
+
+            <button
+              id="forgot-btn"
+              type="button"
+              class="w-full py-3 mt-3 border border-gray-300 text-textDark font-semibold rounded-xl hover:bg-gray-50 transition"
+            >
+              Forgot password?
+            </button>
+          </form>
+
+          <div id="auth-status" class="status info"></div>
 
           <p class="text-center text-sm text-textMuted mt-6">
-            Already have an account? <a href="#" class="text-primary hover:underline">Log in</a> (coming soon)
+            Tip: If you just created an account, you may need to confirm your email first.
           </p>
         </div>
       </div>
@@ -188,7 +238,7 @@
     <section class="py-20 md:py-28 bg-white">
       <div class="max-w-5xl mx-auto px-6 text-center">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-12">Connection shouldn’t feel this hard</h2>
-        
+
         <div class="grid md:grid-cols-3 gap-8 text-left">
           <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
             <p class="text-xl font-medium mb-4">Done with endless scrolling</p>
@@ -213,58 +263,40 @@
     <section class="py-20 md:py-28 bg-neutral">
       <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
-        
+
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          <!-- Card 1 -->
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-              🗺️
-            </div>
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🗺️</div>
             <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
             <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
           </div>
 
-          <!-- Card 2 -->
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-              ➕
-            </div>
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">➕</div>
             <h3 class="text-2xl font-semibold mb-4">Host in 30 seconds</h3>
             <p class="text-textMuted">Pick spot, time, activity. Public or invite-only. No long forms.</p>
           </div>
 
-          <!-- Card 3 -->
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-              🤝
-            </div>
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🤝</div>
             <h3 class="text-2xl font-semibold mb-4">Vetted & kind-first</h3>
             <p class="text-textMuted">DM approval for private groups. Report/block easy. Safe & welcoming.</p>
           </div>
 
-          <!-- Card 4 -->
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-              🔄
-            </div>
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🔄</div>
             <h3 class="text-2xl font-semibold mb-4">Build your circle</h3>
             <p class="text-textMuted">Recurring hangs appear automatically. Familiar faces, real friendships.</p>
           </div>
 
-          <!-- Card 5 -->
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-              📱
-            </div>
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">📱</div>
             <h3 class="text-2xl font-semibold mb-4">Mobile-first, simple</h3>
             <p class="text-textMuted">iOS & Android coming soon. Web works great right now.</p>
           </div>
 
-          <!-- Card 6 -->
           <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-              🌍
-            </div>
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🌍</div>
             <h3 class="text-2xl font-semibold mb-4">Open to everyone</h3>
             <p class="text-textMuted">All identities, all vibes. Tag groups as queer-friendly, ally-welcome, etc.</p>
           </div>
@@ -275,13 +307,11 @@
     <!-- Final CTA -->
     <section id="get-started" class="py-24 md:py-32 bg-gradient-to-br from-primary to-accent text-white text-center">
       <div class="max-w-5xl mx-auto px-6">
-        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">
-          Start meeting people where you live
-        </h2>
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">Start meeting people where you live</h2>
         <p class="text-xl md:text-2xl mb-10 opacity-90">
           Download the app or sign up on web — your first hang could be this weekend.
         </p>
-        
+
         <div class="flex flex-col sm:flex-row justify-center gap-6">
           <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">
             Get on iOS (coming soon)
@@ -290,9 +320,9 @@
             Get on Android (coming soon)
           </a>
         </div>
-        
+
         <p class="mt-10 text-lg opacity-90">
-          Or <a href="#" class="underline hover:opacity-100">create an account on web</a> and start browsing now.
+          Or <a href="#auth" class="underline hover:opacity-100">create an account / log in on web</a> and start browsing now.
         </p>
       </div>
     </section>
@@ -311,57 +341,229 @@
 
   </div>
 
-  <!-- Supabase (must be after the form exists) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 1) Supabase JS (UMD build, reliable window.supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+
+  <!-- 2) Auth logic (hardened) -->
   <script>
+    // --- Supabase config ---
+    // NOTE: this is a "publishable/anon" key and is expected to be public.
     const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
 
-    const statusBox = document.getElementById("signup-status");
-    const signupBtn = document.getElementById("signup-btn");
+    // --- DOM ---
+    const statusBox = document.getElementById("auth-status");
+    const tabSignup = document.getElementById("tab-signup");
+    const tabLogin  = document.getElementById("tab-login");
+    const signupForm = document.getElementById("signup-form");
+    const loginForm  = document.getElementById("login-form");
+    const signupBtn  = document.getElementById("signup-btn");
+    const loginBtn   = document.getElementById("login-btn");
+    const forgotBtn  = document.getElementById("forgot-btn");
 
-    function setStatus(type, msg) {
+    const alreadyLoggedIn = document.getElementById("already-logged-in");
+    const loggedInAs = document.getElementById("logged-in-as");
+
+    function showStatus(type, msg) {
       statusBox.className = "status " + type;
       statusBox.textContent = msg;
+      statusBox.style.display = "block";
+    }
+    function clearStatus() {
+      statusBox.className = "status info";
+      statusBox.textContent = "";
+      statusBox.style.display = "none";
     }
 
-    if (!window.supabase) {
-      // If CDN fails, you’ll see this clearly.
-      setStatus("err", "Supabase library failed to load. Hard refresh (Ctrl+F5) and try again.");
-    } else {
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Prevent "mystery refresh" even if later JS crashes:
+    signupForm.addEventListener("submit", (e) => e.preventDefault());
+    loginForm.addEventListener("submit", (e) => e.preventDefault());
 
-      document.getElementById("signup-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
+    // Show JS errors in the UI
+    window.addEventListener("error", (e) => {
+      showStatus("err", "JavaScript error: " + e.message);
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+      const msg = (e.reason && (e.reason.message || String(e.reason))) || "Unknown error";
+      showStatus("err", "Unhandled promise rejection: " + msg);
+    });
 
-        signupBtn.disabled = true;
-        setStatus("info", "Creating your account…");
+    // Warn if running as file:// (strongly discouraged for auth)
+    if (location.protocol === "file:") {
+      showStatus("err",
+        "You are running this as a local file (file://). Supabase Auth is designed for http/https. " +
+        "Use VS Code Live Server or deploy (GitHub Pages/Netlify), then try again."
+      );
+    }
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
+    // Ensure Supabase loaded
+    if (!window.supabase || typeof window.supabase.createClient !== "function") {
+      showStatus("err",
+        "Supabase JS failed to load. Check adblock/CSP or the Supabase <script src=...> URL."
+      );
+    }
 
-        try {
-          const { data, error } = await supabase.auth.signUp({ email, password });
+    // Create client (only if library exists)
+    const supabase = (window.supabase && typeof window.supabase.createClient === "function")
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+      : null;
 
-          if (error) {
-            setStatus("err", error.message);
-            signupBtn.disabled = false;
-            return;
-          }
+    // Simple validators
+    function isValidEmail(email) {
+      // pragmatic check; browser-level validation is inconsistent with novalidate
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function isValidPassword(pw) {
+      return typeof pw === "string" && pw.length >= 6;
+    }
 
-          // If email confirmations are ON (recommended), they must confirm before login.
-          setStatus("ok", "Account created. Check your email to confirm, then come back to log in.");
-        } catch (err) {
-          setStatus("err", "Unexpected error: " + (err?.message || String(err)));
-          signupBtn.disabled = false;
-        }
+    function setTab(which) {
+      clearStatus();
+      const isSignup = which === "signup";
+      signupForm.classList.toggle("hidden", !isSignup);
+      loginForm.classList.toggle("hidden", isSignup);
+
+      tabSignup.className = isSignup
+        ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
+        : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
+
+      tabLogin.className = !isSignup
+        ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
+        : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
+    }
+
+    tabSignup.addEventListener("click", () => setTab("signup"));
+    tabLogin.addEventListener("click", () => setTab("login"));
+    setTab("signup");
+
+    // Build redirect URL safely (works with /, /index.html, GitHub Pages subpaths, etc.)
+    function getAppRedirectUrl() {
+      return new URL("app.html", window.location.href).toString();
+    }
+
+    // Create account
+    signupForm.addEventListener("submit", async () => {
+      if (!supabase) return; // error already shown
+
+      clearStatus();
+      signupBtn.disabled = true;
+
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value;
+
+      if (!isValidEmail(email)) {
+        signupBtn.disabled = false;
+        return showStatus("err", "Please enter a valid email address.");
+      }
+      if (!isValidPassword(password)) {
+        signupBtn.disabled = false;
+        return showStatus("err", "Password must be at least 6 characters.");
+      }
+
+      showStatus("info", "Creating your account…");
+
+      const redirectTo = getAppRedirectUrl();
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: redirectTo }
       });
+
+      signupBtn.disabled = false;
+
+      if (error) return showStatus("err", error.message);
+
+      // If email confirmations are ON, Supabase returns user but no session
+      const needsEmailConfirm = !data?.session;
+
+      if (needsEmailConfirm) {
+        showStatus("ok", "Account created. Check your email to confirm, then return here and log in.");
+        setTab("login");
+        document.getElementById("login-email").value = email;
+        document.getElementById("login-password").focus();
+      } else {
+        showStatus("ok", "Account created and signed in. Redirecting…");
+        window.location.href = "./app.html";
+      }
+    });
+
+    // Log in -> app.html
+    loginForm.addEventListener("submit", async () => {
+      if (!supabase) return; // error already shown
+
+      clearStatus();
+      loginBtn.disabled = true;
+
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      if (!isValidEmail(email)) {
+        loginBtn.disabled = false;
+        return showStatus("err", "Please enter a valid email address.");
+      }
+      if (!isValidPassword(password)) {
+        loginBtn.disabled = false;
+        return showStatus("err", "Password must be at least 6 characters.");
+      }
+
+      showStatus("info", "Logging you in…");
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      loginBtn.disabled = false;
+
+      if (error) return showStatus("err", error.message);
+
+      showStatus("ok", "Logged in. Redirecting…");
+      window.location.href = "./app.html";
+    });
+
+    // Forgot password
+    forgotBtn.addEventListener("click", async () => {
+      if (!supabase) return;
+
+      clearStatus();
+      const email = document.getElementById("login-email").value.trim();
+
+      if (!isValidEmail(email)) {
+        return showStatus("err", "Enter your email above first, then click Forgot password.");
+      }
+
+      showStatus("info", "Sending reset email…");
+
+      const redirectTo = getAppRedirectUrl();
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+
+      if (error) return showStatus("err", error.message);
+      showStatus("ok", "Password reset email sent. Check your inbox.");
+    });
+
+    // Logged-in banner
+    async function refreshLoggedInBanner() {
+      if (!supabase) return;
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        // not fatal, but visible
+        return showStatus("err", error.message);
+      }
+      if (session?.user) {
+        alreadyLoggedIn.classList.remove("hidden");
+        loggedInAs.textContent = `Signed in as ${session.user.email}`;
+      } else {
+        alreadyLoggedIn.classList.add("hidden");
+        loggedInAs.textContent = "";
+      }
+    }
+
+    if (supabase) {
+      supabase.auth.onAuthStateChange(() => refreshLoggedInBanner());
+      refreshLoggedInBanner();
     }
   </script>
 
-  <!-- JavaScript: fixed splash close (no Supabase crash) -->
+  <!-- 3) Splash control -->
   <script>
-    // Splash control - super reliable version
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
     const video = document.getElementById('introVideo');
@@ -374,56 +576,27 @@
       if (video) video.pause();
     }
 
-    // Video end triggers
     if (video) {
       video.onended = () => closeSplash('video ended');
-      
-      // Near-end detection
       video.addEventListener('timeupdate', () => {
-        if (video.duration && video.currentTime >= video.duration - 0.5) {
-          closeSplash('timeupdate near end');
-        }
+        if (video.duration && video.currentTime >= video.duration - 0.5) closeSplash('timeupdate near end');
       });
-
-      // Duration fallback
       video.addEventListener('loadedmetadata', () => {
         const duration = video.duration || 8;
         setTimeout(() => {
-          if (!splash.classList.contains('hidden')) {
-            closeSplash('duration fallback');
-          }
+          if (!splash.classList.contains('hidden')) closeSplash('duration fallback');
         }, (duration * 1000) + 4000);
       });
     }
 
-    // Click / tap anywhere on splash
     if (splash) {
       splash.addEventListener('click', () => closeSplash('click'));
-      splash.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        closeSplash('touch');
-      });
+      splash.addEventListener('touchend', (e) => { e.preventDefault(); closeSplash('touch'); });
     }
+    if (skipBtn) skipBtn.addEventListener('click', () => closeSplash('skip button'));
+    document.addEventListener('keydown', () => { if (!splash.classList.contains('hidden')) closeSplash('keydown'); });
 
-    // Skip button
-    if (skipBtn) {
-      skipBtn.addEventListener('click', () => closeSplash('skip button'));
-    }
-
-    // Key press anywhere
-    document.addEventListener('keydown', () => {
-      if (!splash.classList.contains('hidden')) {
-        closeSplash('keydown');
-      }
-    });
-
-    // Max 25s fallback
-    setTimeout(() => {
-      if (!splash.classList.contains('hidden')) {
-        closeSplash('max timeout 25s');
-      }
-    }, 25000);
-
+    setTimeout(() => { if (!splash.classList.contains('hidden')) closeSplash('max timeout 25s'); }, 25000);
     console.log('Splash script loaded - ready to close on events');
   </script>
 
