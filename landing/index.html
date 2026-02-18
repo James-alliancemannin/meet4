@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
-  <!-- Tailwind CDN (dev only) -->
+
+  <!-- Tailwind CDN – good for prototype; compile for production -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,10 +25,15 @@
       }
     }
   </script>
-  <!-- Inter font -->
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
+
     /* Splash */
     #splash {
       position: fixed; inset: 0; z-index: 9999;
@@ -42,7 +48,13 @@
       border: 1px solid rgba(255,255,255,0.4); border-radius: 9999px;
       font-weight: 500; cursor: pointer; z-index: 10000; transition: all 0.2s;
     }
-    #skip-btn:hover { background: rgba(255,255,255,0.4); }
+    #skip-btn:hover,
+    #skip-btn:focus {
+      background: rgba(255,255,255,0.4);
+      outline: 2px solid #10b981;
+      outline-offset: 2px;
+    }
+
     /* Status messages */
     .status {
       margin-top: 14px; padding: 10px 12px; border-radius: 12px;
@@ -51,18 +63,39 @@
     .status.ok    { display:block; background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.35); }
     .status.err   { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
     .status.info  { display:block; background:#eff6ff; color:#1e3a8a; border:1px solid rgba(59,130,246,.25); }
+
     button[disabled] { opacity:.65; cursor:not-allowed; }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      #splash { transition: none; }
+    }
   </style>
 </head>
 <body class="bg-neutral text-textDark antialiased">
 
   <!-- Splash screen -->
   <div id="splash">
-    <video id="introVideo" autoplay muted playsinline>
+    <!-- Static poster fallback for instant paint / no video support -->
+    <video
+      id="introVideo"
+      autoplay
+      muted
+      playsinline
+      poster="splash-poster.jpg"  
+      <!-- Add a static image fallback in same folder -->
+      aria-label="meet4 intro video"
+    >
       <source src="meet4.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <button id="skip-btn" type="button">Skip Intro</button>
+    <button
+      id="skip-btn"
+      type="button"
+      aria-label="Skip introduction video"
+    >
+      Skip Intro
+    </button>
   </div>
 
   <!-- Main content -->
@@ -106,7 +139,7 @@
           </p>
 
           <!-- Tabs -->
-          <div class="flex gap-3 mb-7">
+          <div class="flex gap-3 mb-6">
             <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">
               Create account
             </button>
@@ -114,6 +147,13 @@
               Log in
             </button>
           </div>
+
+          <!-- Forgot password link – always visible -->
+          <p class="text-center text-sm mb-6">
+            <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">
+              Forgot your password?
+            </button>
+          </p>
 
           <!-- SIGN UP FORM -->
           <form id="signup-form" autocomplete="on" novalidate>
@@ -136,19 +176,17 @@
               <label for="login-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
               <input type="email" id="login-email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
             </div>
-            <div class="mb-4">
+            <div class="mb-6">
               <label for="login-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
               <input type="password" id="login-password" required minlength="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your password" autocomplete="current-password" />
             </div>
             <button id="login-btn" type="submit" class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg">
               Log in
             </button>
-            <button id="forgot-btn" type="button" class="w-full py-3 mt-3 border border-gray-300 text-textDark font-semibold rounded-xl hover:bg-gray-50 transition">
-              Forgot password?
-            </button>
           </form>
 
-          <div id="auth-status" class="status info"></div>
+          <div id="auth-status" class="status info mt-6"></div>
+
           <p class="text-center text-sm text-textMuted mt-6">
             Tip: If you just created an account, you may need to confirm your email first.
           </p>
@@ -254,14 +292,15 @@
 
   </div>
 
-  <!-- Supabase -->
+  <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Auth logic -->
   <script>
-    // Config
-    const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c"; // ← use your real anon key
+    // ────────────────────────────────────────────────
+    // Config – anon key is public; real security is RLS + policies
+    // ────────────────────────────────────────────────
+    const SUPABASE_URL      = "https://hvzyndiuxivlwfjcvdls.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
 
     const statusBox       = document.getElementById("auth-status");
     const tabSignup       = document.getElementById("tab-signup");
@@ -284,26 +323,16 @@
       statusBox.style.display = "none";
     }
 
-    // Prevent native submits
-    [signupForm, loginForm].forEach(form => {
-      form?.addEventListener("submit", e => e.preventDefault());
-    });
-
     // Supabase client
     if (!window.supabase?.createClient) {
-      showStatus("err", "Supabase library failed to load. Check network / adblocker.");
+      showStatus("err", "Supabase library failed to load. Check network/adblocker.");
     }
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Safe redirect helpers
-    function getAppUrl() {
-      return new URL("app.html", window.location.href).href;
-    }
-
-    function getResetUrl() {
-      return new URL("reset-password.html", window.location.href).href;
-    }
+    // Redirect helpers
+    function getAppUrl()    { return new URL("app.html", window.location.href).href; }
+    function getResetUrl()  { return new URL("reset-password.html", window.location.href).href; }
 
     // ────────────────────────────────────────────────
     // Tab switching
@@ -321,21 +350,22 @@
     }
 
     tabSignup.addEventListener("click", () => setTab(true));
-    tabLogin.addEventListener("click", () => setTab(false));
+    tabLogin.addEventListener("click",  () => setTab(false));
     setTab(true);
 
     // ────────────────────────────────────────────────
     // Sign Up
     // ────────────────────────────────────────────────
-    signupForm.addEventListener("submit", async () => {
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
       clearStatus();
       signupBtn.disabled = true;
 
       const email    = document.getElementById("signup-email").value.trim();
       const password = document.getElementById("signup-password").value;
 
-      if (!email.includes("@") || password.length < 6) {
-        showStatus("err", "Please enter valid email and password (min 6 chars).");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
+        showStatus("err", "Valid email and password (min 6 chars) required.");
         signupBtn.disabled = false;
         return;
       }
@@ -350,7 +380,10 @@
 
       signupBtn.disabled = false;
 
-      if (error) return showStatus("err", error.message);
+      if (error) {
+        showStatus("err", error.message);
+        return;
+      }
 
       showStatus("ok", "Account created! Check your email to confirm, then log in.");
       setTab(false);
@@ -360,14 +393,15 @@
     // ────────────────────────────────────────────────
     // Log In
     // ────────────────────────────────────────────────
-    loginForm.addEventListener("submit", async () => {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
       clearStatus();
       loginBtn.disabled = true;
 
       const email    = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value;
 
-      if (!email.includes("@") || password.length < 6) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
         showStatus("err", "Invalid email or password.");
         loginBtn.disabled = false;
         return;
@@ -377,48 +411,56 @@
 
       const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-      loginBtn.disabled = false;
-
-      if (error) return showStatus("err", error.message);
+      if (error) {
+        showStatus("err", error.message);
+        loginBtn.disabled = false;
+        return;
+      }
 
       showStatus("ok", "Logged in! Redirecting…");
-      window.location.href = "./app.html";
+
+      // Small delay for session to settle
+      setTimeout(() => {
+        window.location.href = "./app.html";
+      }, 600);
     });
 
     // ────────────────────────────────────────────────
-    // Forgot Password – now redirects to reset-password.html
+    // Forgot Password
     // ────────────────────────────────────────────────
     forgotBtn.addEventListener("click", async () => {
       clearStatus();
 
-      const email = document.getElementById("login-email").value.trim();
-      if (!email || !email.includes("@")) {
-        return showStatus("err", "Please enter your email address first.");
+      const email = document.getElementById("login-email")?.value.trim() ||
+                    document.getElementById("signup-email")?.value.trim() ||
+                    "";
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return showStatus("err", "Please enter a valid email address first.");
       }
 
       showStatus("info", "Sending password reset email…");
 
-      const redirectTo = getResetUrl();
-
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo
+        redirectTo: getResetUrl()
       });
 
       if (error) {
         showStatus("err", error.message);
       } else {
-        showStatus("ok", "Password reset email sent. Check your inbox (including spam).");
+        showStatus("ok", "Reset email sent — check inbox and spam.");
       }
     });
 
     // ────────────────────────────────────────────────
-    // Logged-in banner
+    // Logged-in banner (async-safe)
     // ────────────────────────────────────────────────
-    async function refreshLoggedInBanner() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
+    async function refreshLoggedInBanner(_event, session) {
+      const activeSession = session ?? (await supabase.auth.getSession()).data.session;
+
+      if (activeSession?.user) {
         alreadyLoggedIn.classList.remove("hidden");
-        loggedInAs.textContent = `Signed in as ${session.user.email}`;
+        loggedInAs.textContent = `Signed in as ${activeSession.user.email}`;
       } else {
         alreadyLoggedIn.classList.add("hidden");
         loggedInAs.textContent = "";
@@ -426,10 +468,10 @@
     }
 
     supabase.auth.onAuthStateChange(refreshLoggedInBanner);
-    refreshLoggedInBanner();
+    refreshLoggedInBanner(); // initial check
   </script>
 
-  <!-- Splash control -->
+  <!-- Splash control (isolated) -->
   <script>
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
@@ -459,13 +501,22 @@
     splash?.addEventListener('click', () => closeSplash('click'));
     splash?.addEventListener('touchend', e => { e.preventDefault(); closeSplash('touch'); });
     skipBtn?.addEventListener('click', () => closeSplash('skip button'));
-    document.addEventListener('keydown', () => {
-      if (!splash.classList.contains('hidden')) closeSplash('keydown');
+
+    // Keyboard accessibility for skip
+    document.addEventListener('keydown', e => {
+      if ((e.key === 'Enter' || e.key === 'Escape') && !splash.classList.contains('hidden')) {
+        closeSplash('keyboard');
+      }
     });
 
     setTimeout(() => {
       if (!splash.classList.contains('hidden')) closeSplash('max timeout 25s');
     }, 25000);
+
+    // Auto-skip for reduced-motion users
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      closeSplash('reduced motion preference');
+    }
   </script>
 
 </body>
