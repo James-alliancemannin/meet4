@@ -6,7 +6,7 @@
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
 
-  <!-- Tailwind CDN – good for prototype; for production compile to purge unused styles + self-host -->
+  <!-- Tailwind CDN – good for prototype; compile for production -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -26,7 +26,7 @@
     }
   </script>
 
-  <!-- Preconnect to Google Fonts for faster loading -->
+  <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -49,7 +49,11 @@
       font-weight: 500; cursor: pointer; z-index: 10000; transition: all 0.2s;
     }
     #skip-btn:hover,
-    #skip-btn:focus { background: rgba(255,255,255,0.4); outline: 2px solid #10b981; outline-offset: 2px; }
+    #skip-btn:focus {
+      background: rgba(255,255,255,0.4);
+      outline: 2px solid #10b981;
+      outline-offset: 2px;
+    }
 
     /* Status messages */
     .status {
@@ -62,7 +66,7 @@
 
     button[disabled] { opacity:.65; cursor:not-allowed; }
 
-    /* Respect reduced motion preference */
+    /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
       #splash { transition: none; }
     }
@@ -70,14 +74,15 @@
 </head>
 <body class="bg-neutral text-textDark antialiased">
 
-  <!-- Splash screen with poster + accessibility + reduced-motion support -->
+  <!-- Splash screen -->
   <div id="splash">
+    <!-- Static poster fallback for instant paint / no video support -->
     <video
       id="introVideo"
       autoplay
       muted
       playsinline
-      poster="splash-poster.jpg"  <!-- Add a static fallback image in same folder -->
+      poster="splash-poster.jpg"  <!-- Add a static image fallback in same folder -->
       aria-label="meet4 intro video"
     >
       <source src="meet4.mp4" type="video/mp4">
@@ -113,7 +118,7 @@
             Host something simple
           </a>
         </div>
-        <!-- Already logged in -->
+        <!-- Already logged in banner -->
         <div id="already-logged-in" class="hidden mt-8">
           <a href="./app.html" class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl">
             Go to the app →
@@ -123,7 +128,7 @@
       </div>
     </header>
 
-    <!-- Auth -->
+    <!-- Auth Section -->
     <section class="py-16 bg-white" id="auth">
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
@@ -133,7 +138,7 @@
           </p>
 
           <!-- Tabs -->
-          <div class="flex gap-3 mb-7">
+          <div class="flex gap-3 mb-6">
             <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">
               Create account
             </button>
@@ -142,7 +147,7 @@
             </button>
           </div>
 
-          <!-- Forgot password link – always visible, prominent -->
+          <!-- Forgot password link – always visible -->
           <p class="text-center text-sm mb-6">
             <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">
               Forgot your password?
@@ -179,7 +184,7 @@
             </button>
           </form>
 
-          <div id="auth-status" class="status info"></div>
+          <div id="auth-status" class="status info mt-6"></div>
 
           <p class="text-center text-sm text-textMuted mt-6">
             Tip: If you just created an account, you may need to confirm your email first.
@@ -286,12 +291,12 @@
 
   </div>
 
-  <!-- Supabase client – anon key is public by design; real security comes from Row Level Security (RLS) on tables + Storage policies -->
+  <!-- Supabase client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <script>
     // ────────────────────────────────────────────────
-    // Config
+    // Config – anon key is public; real security is RLS + policies
     // ────────────────────────────────────────────────
     const SUPABASE_URL      = "https://hvzyndiuxivlwfjcvdls.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
@@ -325,7 +330,7 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Redirect helpers
-    function getAppUrl()    { return new URL("app.html",   window.location.href).href; }
+    function getAppUrl()    { return new URL("app.html", window.location.href).href; }
     function getResetUrl()  { return new URL("reset-password.html", window.location.href).href; }
 
     // ────────────────────────────────────────────────
@@ -413,19 +418,18 @@
 
       showStatus("ok", "Logged in! Redirecting…");
 
-      // Small delay helps session settle in some browsers
+      // Small delay for session to settle
       setTimeout(() => {
         window.location.href = "./app.html";
       }, 600);
     });
 
     // ────────────────────────────────────────────────
-    // Forgot Password – always visible link
+    // Forgot Password
     // ────────────────────────────────────────────────
     forgotBtn.addEventListener("click", async () => {
       clearStatus();
 
-      // Use email from whichever form has content
       const email = document.getElementById("login-email")?.value.trim() ||
                     document.getElementById("signup-email")?.value.trim() ||
                     "";
@@ -443,16 +447,15 @@
       if (error) {
         showStatus("err", error.message);
       } else {
-        showStatus("ok", "Reset email sent — check your inbox (and spam/junk folder).");
+        showStatus("ok", "Reset email sent — check inbox and spam.");
       }
     });
 
     // ────────────────────────────────────────────────
-    // Logged-in banner
+    // Logged-in banner (async-safe)
     // ────────────────────────────────────────────────
-    function refreshLoggedInBanner(event, session) {
-      // Use passed session when available (faster)
-      const activeSession = session || (supabase.auth.getSession()?.data?.session);
+    async function refreshLoggedInBanner(_event, session) {
+      const activeSession = session ?? (await supabase.auth.getSession()).data.session;
 
       if (activeSession?.user) {
         alreadyLoggedIn.classList.remove("hidden");
@@ -464,20 +467,10 @@
     }
 
     supabase.auth.onAuthStateChange(refreshLoggedInBanner);
-    refreshLoggedInBanner();  // initial check
-
-    // Auto-skip splash on reduced-motion preference
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const splash = document.getElementById('splash');
-      const mainContent = document.getElementById('main-content');
-      if (splash && mainContent) {
-        splash.classList.add('hidden');
-        mainContent.classList.remove('hidden');
-      }
-    }
+    refreshLoggedInBanner(); // initial check
   </script>
 
-  <!-- Splash control -->
+  <!-- Splash control (isolated) -->
   <script>
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
@@ -507,15 +500,22 @@
     splash?.addEventListener('click', () => closeSplash('click'));
     splash?.addEventListener('touchend', e => { e.preventDefault(); closeSplash('touch'); });
     skipBtn?.addEventListener('click', () => closeSplash('skip button'));
+
+    // Keyboard accessibility for skip
     document.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === 'Escape') {
-        if (!splash.classList.contains('hidden')) closeSplash('keyboard');
+      if ((e.key === 'Enter' || e.key === 'Escape') && !splash.classList.contains('hidden')) {
+        closeSplash('keyboard');
       }
     });
 
     setTimeout(() => {
       if (!splash.classList.contains('hidden')) closeSplash('max timeout 25s');
     }, 25000);
+
+    // Auto-skip for reduced-motion users
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      closeSplash('reduced motion preference');
+    }
   </script>
 
 </body>
