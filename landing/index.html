@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
-  <!-- Tailwind CDN (development only) -->
+  <!-- Tailwind CDN (dev only) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -48,10 +48,10 @@
       margin-top: 14px; padding: 10px 12px; border-radius: 12px;
       font-size: 0.95rem; line-height: 1.3; display: none;
     }
-    .status.ok    { display: block; background: #ecfdf5; color: #065f46; border: 1px solid rgba(16,185,129,.35); }
-    .status.err   { display: block; background: #fef2f2; color: #991b1b; border: 1px solid rgba(239,68,68,.35); }
-    .status.info  { display: block; background: #eff6ff; color: #1e3a8a; border: 1px solid rgba(59,130,246,.25); }
-    button[disabled] { opacity: 0.65; cursor: not-allowed; }
+    .status.ok    { display:block; background:#ecfdf5; color:#065f46; border:1px solid rgba(16,185,129,.35); }
+    .status.err   { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
+    .status.info  { display:block; background:#eff6ff; color:#1e3a8a; border:1px solid rgba(59,130,246,.25); }
+    button[disabled] { opacity:.65; cursor:not-allowed; }
   </style>
 </head>
 <body class="bg-neutral text-textDark antialiased">
@@ -65,10 +65,10 @@
     <button id="skip-btn" type="button">Skip Intro</button>
   </div>
 
-  <!-- Main content (hidden until splash ends) -->
+  <!-- Main content -->
   <div id="main-content" class="hidden">
 
-    <!-- Hero / Landing -->
+    <!-- Hero -->
     <header class="relative bg-white">
       <div class="max-w-7xl mx-auto px-6 py-24 md:py-32 lg:py-40 text-center">
         <img src="logo.jpg" alt="meet4 logo" class="mx-auto h-64 md:h-80 lg:h-96 w-auto mb-10 object-contain" />
@@ -86,7 +86,7 @@
             Host something simple
           </a>
         </div>
-        <!-- Already logged in notice -->
+        <!-- Already logged in banner -->
         <div id="already-logged-in" class="hidden mt-8">
           <a href="./app.html" class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl">
             Go to the app →
@@ -96,7 +96,7 @@
       </div>
     </header>
 
-    <!-- Auth section -->
+    <!-- Auth Section -->
     <section class="py-16 bg-white" id="auth">
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
@@ -149,7 +149,6 @@
           </form>
 
           <div id="auth-status" class="status info"></div>
-
           <p class="text-center text-sm text-textMuted mt-6">
             Tip: If you just created an account, you may need to confirm your email first.
           </p>
@@ -255,16 +254,14 @@
 
   </div>
 
-  <!-- Supabase Client (UMD build for reliability) -->
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Authentication Logic -->
+  <!-- Auth logic -->
   <script>
-    // ────────────────────────────────────────────────
-    // Config & Early Safety
-    // ────────────────────────────────────────────────
+    // Config
     const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c"; 
+    const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c"; // ← use your real anon key
 
     const statusBox       = document.getElementById("auth-status");
     const tabSignup       = document.getElementById("tab-signup");
@@ -277,9 +274,9 @@
     const alreadyLoggedIn = document.getElementById("already-logged-in");
     const loggedInAs      = document.getElementById("logged-in-as");
 
-    function showStatus(type, message) {
+    function showStatus(type, msg) {
       statusBox.className = `status ${type}`;
-      statusBox.textContent = message;
+      statusBox.textContent = msg;
       statusBox.style.display = "block";
     }
 
@@ -287,21 +284,25 @@
       statusBox.style.display = "none";
     }
 
-    // Prevent native form submission (safety net)
-    [signupForm, loginForm].forEach(f => f?.addEventListener("submit", e => e.preventDefault()));
+    // Prevent native submits
+    [signupForm, loginForm].forEach(form => {
+      form?.addEventListener("submit", e => e.preventDefault());
+    });
 
-    // Show JS errors in UI
-    window.addEventListener("error", e => showStatus("err", `JS error: ${e.message}`));
-
+    // Supabase client
     if (!window.supabase?.createClient) {
-      showStatus("err", "Failed to load Supabase library. Check network / adblocker.");
+      showStatus("err", "Supabase library failed to load. Check network / adblocker.");
     }
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Safe redirect target
+    // Safe redirect helpers
     function getAppUrl() {
       return new URL("app.html", window.location.href).href;
+    }
+
+    function getResetUrl() {
+      return new URL("reset-password.html", window.location.href).href;
     }
 
     // ────────────────────────────────────────────────
@@ -320,7 +321,7 @@
     }
 
     tabSignup.addEventListener("click", () => setTab(true));
-    tabLogin.addEventListener("click",  () => setTab(false));
+    tabLogin.addEventListener("click", () => setTab(false));
     setTab(true);
 
     // ────────────────────────────────────────────────
@@ -334,12 +335,12 @@
       const password = document.getElementById("signup-password").value;
 
       if (!email.includes("@") || password.length < 6) {
-        showStatus("err", "Please enter a valid email and password (min 6 characters).");
+        showStatus("err", "Please enter valid email and password (min 6 chars).");
         signupBtn.disabled = false;
         return;
       }
 
-      showStatus("info", "Creating your account…");
+      showStatus("info", "Creating account…");
 
       const { error } = await supabase.auth.signUp({
         email,
@@ -349,12 +350,9 @@
 
       signupBtn.disabled = false;
 
-      if (error) {
-        showStatus("err", error.message);
-        return;
-      }
+      if (error) return showStatus("err", error.message);
 
-      showStatus("ok", "Account created! Please check your email to confirm, then log in.");
+      showStatus("ok", "Account created! Check your email to confirm, then log in.");
       setTab(false);
       document.getElementById("login-email").value = email;
     });
@@ -370,52 +368,51 @@
       const password = document.getElementById("login-password").value;
 
       if (!email.includes("@") || password.length < 6) {
-        showStatus("err", "Please enter a valid email and password.");
+        showStatus("err", "Invalid email or password.");
         loginBtn.disabled = false;
         return;
       }
 
-      showStatus("info", "Logging you in…");
+      showStatus("info", "Logging in…");
 
       const { error } = await supabase.auth.signInWithPassword({ email, password });
 
       loginBtn.disabled = false;
 
-      if (error) {
-        showStatus("err", error.message);
-        return;
-      }
+      if (error) return showStatus("err", error.message);
 
-      showStatus("ok", "Logged in successfully! Redirecting…");
+      showStatus("ok", "Logged in! Redirecting…");
       window.location.href = "./app.html";
     });
 
     // ────────────────────────────────────────────────
-    // Forgot Password
+    // Forgot Password – now redirects to reset-password.html
     // ────────────────────────────────────────────────
     forgotBtn.addEventListener("click", async () => {
       clearStatus();
 
       const email = document.getElementById("login-email").value.trim();
-      if (!email.includes("@")) {
+      if (!email || !email.includes("@")) {
         return showStatus("err", "Please enter your email address first.");
       }
 
       showStatus("info", "Sending password reset email…");
 
+      const redirectTo = getResetUrl();
+
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getAppUrl()
+        redirectTo
       });
 
       if (error) {
         showStatus("err", error.message);
       } else {
-        showStatus("ok", "Password reset email sent. Check your inbox.");
+        showStatus("ok", "Password reset email sent. Check your inbox (including spam).");
       }
     });
 
     // ────────────────────────────────────────────────
-    // Show logged-in status on landing page
+    // Logged-in banner
     // ────────────────────────────────────────────────
     async function refreshLoggedInBanner() {
       const { data: { session } } = await supabase.auth.getSession();
@@ -432,12 +429,12 @@
     refreshLoggedInBanner();
   </script>
 
-  <!-- Splash screen control -->
+  <!-- Splash control -->
   <script>
-    const splash     = document.getElementById('splash');
+    const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
-    const video      = document.getElementById('introVideo');
-    const skipBtn    = document.getElementById('skip-btn');
+    const video = document.getElementById('introVideo');
+    const skipBtn = document.getElementById('skip-btn');
 
     function closeSplash(source = 'unknown') {
       console.log(`Splash closed from: ${source}`);
@@ -449,25 +446,25 @@
     if (video) {
       video.onended = () => closeSplash('video ended');
       video.addEventListener('timeupdate', () => {
-        if (video.duration && video.currentTime >= video.duration - 0.5) {
-          closeSplash('near end');
-        }
+        if (video.duration && video.currentTime >= video.duration - 0.5) closeSplash('near end');
       });
       video.addEventListener('loadedmetadata', () => {
         const dur = video.duration || 8;
         setTimeout(() => {
-          if (!splash.classList.contains('hidden')) closeSplash('timeout after duration');
+          if (!splash.classList.contains('hidden')) closeSplash('duration fallback');
         }, (dur * 1000) + 4000);
       });
     }
 
-    splash?.addEventListener('click',       () => closeSplash('click'));
+    splash?.addEventListener('click', () => closeSplash('click'));
     splash?.addEventListener('touchend', e => { e.preventDefault(); closeSplash('touch'); });
-    skipBtn?.addEventListener('click',      () => closeSplash('skip button'));
-    document.addEventListener('keydown',    () => { if (!splash.classList.contains('hidden')) closeSplash('keydown'); });
+    skipBtn?.addEventListener('click', () => closeSplash('skip button'));
+    document.addEventListener('keydown', () => {
+      if (!splash.classList.contains('hidden')) closeSplash('keydown');
+    });
 
     setTimeout(() => {
-      if (!splash.classList.contains('hidden')) closeSplash('global 25s timeout');
+      if (!splash.classList.contains('hidden')) closeSplash('max timeout 25s');
     }, 25000);
   </script>
 
