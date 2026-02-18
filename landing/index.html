@@ -59,7 +59,7 @@
 
   <!-- Splash -->
   <div id="splash">
-    <video id="introVideo" autoplay muted playsinline poster="splash-poster.jpg" aria-label="meet4 intro video">
+    <video id="introVideo" autoplay muted playsinline aria-label="meet4 intro video">
       <source src="meet4.mp4" type="video/mp4">
     </video>
     <button id="skip-btn" type="button" aria-label="Skip introduction video">Skip Intro</button>
@@ -79,17 +79,11 @@
           Walks, coffee runs, board games, park workouts, quiet reading spots. Small groups, real people, zero pressure. Just show up and see who’s around.
         </p>
         <div class="mt-12 flex flex-col sm:flex-row justify-center gap-5">
-          <a href="#get-started" class="inline-flex items-center px-10 py-5 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg hover:shadow-xl text-xl">
-            Find hangs near me →
-          </a>
-          <a href="#auth" class="inline-flex items-center px-10 py-5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-accentSoft transition text-xl">
-            Host something simple
-          </a>
+          <a href="#get-started" class="inline-flex items-center px-10 py-5 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg hover:shadow-xl text-xl">Find hangs near me →</a>
+          <a href="#auth" class="inline-flex items-center px-10 py-5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-accentSoft transition text-xl">Host something simple</a>
         </div>
         <div id="already-logged-in" class="hidden mt-8">
-          <a href="./app.html" class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl">
-            Go to the app →
-          </a>
+          <a href="./app.html" class="inline-flex items-center px-10 py-5 bg-textDark text-white font-semibold rounded-xl hover:opacity-90 transition shadow-lg text-xl">Go to the app →</a>
           <p id="logged-in-as" class="mt-3 text-sm text-textMuted"></p>
         </div>
       </div>
@@ -100,9 +94,7 @@
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
           <h3 class="text-2xl font-bold text-center mb-6">Join the beta now</h3>
-          <p class="text-center text-textMuted mb-8">
-            Create an account today — even in early beta, you'll be first to access real local hangs.
-          </p>
+          <p class="text-center text-textMuted mb-8">Create an account today — even in early beta, you'll be first to access real local hangs.</p>
 
           <div class="flex gap-3 mb-6">
             <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">Create account</button>
@@ -160,10 +152,7 @@
           </div>
           <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
             <p class="text-xl font-medium mb-4">Looking for something else?</p>
-            <p class="text-textMuted">
-              Someone (or a few someones?) to walk with, grab tea, talk, connect — regularly, locally.<br>
-              Look no further.
-            </p>
+            <p class="text-textMuted">Someone (or a few someones?) to walk with, grab tea, talk, connect — regularly, locally.<br>Look no further.</p>
           </div>
         </div>
       </div>
@@ -235,7 +224,7 @@
 
   </div>
 
-  <!-- Supabase – only one script tag! -->
+  <!-- Supabase – ONLY ONE SCRIPT TAG -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <script>
@@ -243,18 +232,18 @@
       const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
 
-      const $ = (id) => document.getElementById(id);
+      const $ = id => document.getElementById(id);
 
-      const statusBox       = $("auth-status");
-      const tabSignup       = $("tab-signup");
-      const tabLogin        = $("tab-login");
-      const signupForm      = $("signup-form");
-      const loginForm       = $("login-form");
-      const signupBtn       = $("signup-btn");
-      const loginBtn        = $("login-btn");
-      const forgotBtn       = $("forgot-btn");
+      const statusBox = $("auth-status");
+      const tabSignup = $("tab-signup");
+      const tabLogin = $("tab-login");
+      const signupForm = $("signup-form");
+      const loginForm = $("login-form");
+      const signupBtn = $("signup-btn");
+      const loginBtn = $("login-btn");
+      const forgotBtn = $("forgot-btn");
       const alreadyLoggedIn = $("already-logged-in");
-      const loggedInAs      = $("logged-in-as");
+      const loggedInAs = $("logged-in-as");
 
       function showStatus(type, msg) {
         if (!statusBox) return alert(msg);
@@ -262,54 +251,38 @@
         statusBox.textContent = msg;
         statusBox.style.display = "block";
       }
+      function clearStatus() { if (statusBox) statusBox.style.display = "none"; }
 
-      function clearStatus() {
-        if (statusBox) statusBox.style.display = "none";
-      }
-
-      // Early exit if markup broken
-      const required = [tabSignup, tabLogin, signupForm, loginForm, signupBtn, loginBtn, forgotBtn];
-      if (required.some(x => !x)) {
-        showStatus("err", "Page markup error: missing auth elements. Check HTML for missing closing tags or IDs.");
-        console.error("Missing elements:", required);
-        return;
-      }
-
-      if (!window.supabase?.createClient) {
-        showStatus("err", "Supabase library did not load (adblock / network issue).");
-        signupBtn.disabled = true;
-        loginBtn.disabled = true;
+      // Safety check
+      if (!supabase || !tabSignup || !signupBtn) {
+        showStatus("err", "Page not loaded correctly. Hard refresh (Ctrl+Shift+R) and try again.");
         return;
       }
 
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      function getAppUrl()   { return new URL("app.html", window.location.href).href; }
+      function getAppUrl() { return new URL("app.html", window.location.href).href; }
       function getResetUrl() { return new URL("reset-password.html", window.location.href).href; }
 
       function setTab(isSignup) {
         clearStatus();
         signupForm.classList.toggle("hidden", !isSignup);
         loginForm.classList.toggle("hidden", isSignup);
-        tabSignup.className = isSignup
-          ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
-          : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
-        tabLogin.className = !isSignup
-          ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary"
-          : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
+        tabSignup.className = isSignup ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary" : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
+        tabLogin.className = !isSignup ? "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary" : "flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary";
       }
 
       tabSignup.addEventListener("click", () => setTab(true));
       tabLogin.addEventListener("click", () => setTab(false));
       setTab(true);
 
-      // SIGN UP – button click handler
+      // SIGN UP
       signupBtn.addEventListener("click", async () => {
         clearStatus();
         signupBtn.disabled = true;
 
-        const email = $("signup-email")?.value.trim() || "";
-        const password = $("signup-password")?.value || "";
+        const email = $("signup-email").value.trim();
+        const password = $("signup-password").value;
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
           showStatus("err", "Valid email and password (min 6 chars) required.");
@@ -333,19 +306,19 @@
           return;
         }
 
-        console.log("Signup success:", data);
-        showStatus("ok", "Account created! Check your email (spam too) for confirmation link.");
+        console.log("Signup success - email should be sent:", data);
+        showStatus("ok", "Account created! Check your email (including spam) for the confirmation link.");
         setTab(false);
         $("login-email").value = email;
       });
 
-      // LOG IN – button click handler
+      // LOG IN
       loginBtn.addEventListener("click", async () => {
         clearStatus();
         loginBtn.disabled = true;
 
-        const email = $("login-email")?.value.trim() || "";
-        const password = $("login-password")?.value || "";
+        const email = $("login-email").value.trim();
+        const password = $("login-password").value;
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 6) {
           showStatus("err", "Invalid email or password.");
@@ -370,28 +343,18 @@
       // FORGOT PASSWORD
       forgotBtn.addEventListener("click", async () => {
         clearStatus();
-
-        const email = $("login-email")?.value.trim() || $("signup-email")?.value.trim() || "";
-
+        const email = $("login-email").value.trim() || $("signup-email").value.trim() || "";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          return showStatus("err", "Type your email in the box first, then click Forgot password.");
+          return showStatus("err", "Type your email first, then click Forgot password.");
         }
-
         showStatus("info", "Sending reset email…");
-
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: getResetUrl()
-        });
-
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: getResetUrl() });
         if (error) showStatus("err", error.message);
         else showStatus("ok", "Reset email sent — check inbox and spam.");
       });
 
-      // Logged-in banner
       async function refreshLoggedInBanner(_event, session) {
         const activeSession = session ?? (await supabase.auth.getSession()).data.session;
-        if (!alreadyLoggedIn || !loggedInAs) return;
-
         if (activeSession?.user) {
           alreadyLoggedIn.classList.remove("hidden");
           loggedInAs.textContent = `Signed in as ${activeSession.user.email}`;
@@ -400,7 +363,6 @@
           loggedInAs.textContent = "";
         }
       }
-
       supabase.auth.onAuthStateChange(refreshLoggedInBanner);
       refreshLoggedInBanner();
     });
