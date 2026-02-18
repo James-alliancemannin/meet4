@@ -30,7 +30,11 @@
 
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
-    #splash { position: fixed; inset: 0; z-index: 9999; background: #111827; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease-out; cursor: pointer; }
+    #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #111827; display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease-out; cursor: pointer;
+    }
     #splash.hidden { opacity: 0; pointer-events: none; }
     #splash video { width: 100%; height: 100%; object-fit: contain; }
     #skip-btn {
@@ -48,7 +52,9 @@
     .status.err   { display:block; background:#fef2f2; color:#991b1b; border:1px solid rgba(239,68,68,.35); }
     .status.info  { display:block; background:#eff6ff; color:#1e3a8a; border:1px solid rgba(59,130,246,.25); }
     button[disabled] { opacity:.65; cursor:not-allowed; }
-    #forgot-email-wrapper { display: none; margin-top: 16px; }
+    /* Only spacing — no display:none here anymore */
+    #forgot-email-wrapper { margin-top: 16px; }
+    @media (prefers-reduced-motion: reduce) { #splash { transition: none; } }
   </style>
 </head>
 <body class="bg-neutral text-textDark antialiased">
@@ -96,7 +102,9 @@
       <div class="max-w-md mx-auto px-6">
         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
           <h3 class="text-2xl font-bold text-center mb-6">Join the beta now</h3>
-          <p class="text-center text-textMuted mb-8">Create an account today — even in early beta, you'll be first to access real local hangs.</p>
+          <p class="text-center text-textMuted mb-8">
+            Create an account today — even in early beta, you'll be first to access real local hangs.
+          </p>
 
           <div class="flex gap-3 mb-6">
             <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">Create account</button>
@@ -108,7 +116,7 @@
             <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">Forgot your password?</button>
           </p>
 
-          <!-- Forgot password input (hidden until clicked) -->
+          <!-- Forgot password input (starts hidden, controlled by Tailwind) -->
           <div id="forgot-email-wrapper" class="mb-6 hidden">
             <label for="forgot-email" class="block text-sm font-medium text-textMuted mb-2">Your email</label>
             <input type="email" id="forgot-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
@@ -142,21 +150,109 @@
           </form>
 
           <div id="auth-status" class="status info mt-6"></div>
-          <p class="text-center text-sm text-textMuted mt-6">Tip: If you just created an account, you may need to confirm your email first.</p>
+          <p class="text-center text-sm text-textMuted mt-6">
+            Tip: If you just created an account, you may need to confirm your email first.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- Pain points, Features, CTA, Footer (add your full original sections here) -->
+    <!-- Pain points -->
+    <section class="py-20 md:py-28 bg-white">
+      <div class="max-w-5xl mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-12">Connection shouldn’t feel this hard</h2>
+        <div class="grid md:grid-cols-3 gap-8 text-left">
+          <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
+            <p class="text-xl font-medium mb-4">Done with endless scrolling</p>
+            <p class="text-textMuted">Friends busy, apps feel empty, another night alone on the couch.</p>
+          </div>
+          <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
+            <p class="text-xl font-medium mb-4">Bars & events aren’t always it</p>
+            <p class="text-textMuted">Loud, expensive, hookup-focused — not everyone wants that every time.</p>
+          </div>
+          <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
+            <p class="text-xl font-medium mb-4">Looking for something else?</p>
+            <p class="text-textMuted">
+              Someone (or a few someones?) to walk with, grab tea, talk, connect — regularly, locally.<br>
+              Look no further.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-20 md:py-28 bg-neutral">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🗺️</div>
+            <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
+            <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">➕</div>
+            <h3 class="text-2xl font-semibold mb-4">Host in 30 seconds</h3>
+            <p class="text-textMuted">Pick spot, time, activity. Public or invite-only. No long forms.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🤝</div>
+            <h3 class="text-2xl font-semibold mb-4">Vetted & kind-first</h3>
+            <p class="text-textMuted">DM approval for private groups. Report/block easy. Safe & welcoming.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🔄</div>
+            <h3 class="text-2xl font-semibold mb-4">Build your circle</h3>
+            <p class="text-textMuted">Recurring hangs appear automatically. Familiar faces, real friendships.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">📱</div>
+            <h3 class="text-2xl font-semibold mb-4">Mobile-first, simple</h3>
+            <p class="text-textMuted">iOS & Android coming soon. Web works great right now.</p>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🌍</div>
+            <h3 class="text-2xl font-semibold mb-4">Open to everyone</h3>
+            <p class="text-textMuted">All identities, all vibes. Tag groups as queer-friendly, ally-welcome, etc.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="get-started" class="py-24 md:py-32 bg-gradient-to-br from-primary to-accent text-white text-center">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8">Start meeting people where you live</h2>
+        <p class="text-xl md:text-2xl mb-10 opacity-90">Download the app or sign up on web — your first hang could be this weekend.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-6">
+          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">Get on iOS (coming soon)</a>
+          <a href="#" class="inline-block px-12 py-6 bg-white text-primary font-bold rounded-xl text-xl shadow-xl hover:bg-accentSoft transition">Get on Android (coming soon)</a>
+        </div>
+        <p class="mt-10 text-lg opacity-90">Or <a href="#auth" class="underline hover:opacity-100">create an account / log in on web</a> and start browsing now.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-textDark text-gray-300 py-12 text-center text-sm">
+      <div class="max-w-7xl mx-auto px-6">
+        <p>© 2026 meet4. All rights reserved.</p>
+        <div class="mt-4 space-x-6">
+          <a href="/privacy" class="hover:text-accent transition">Privacy</a>
+          <a href="/terms" class="hover:text-accent transition">Terms</a>
+          <a href="/contact" class="hover:text-accent transition">Contact</a>
+        </div>
+      </div>
+    </footer>
 
   </div>
 
-  <!-- Supabase – ONLY ONE SCRIPT TAG -->
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      console.log("DOM ready – starting auth logic");
+      console.log("DOM ready – auth script running");
 
       const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
@@ -174,6 +270,8 @@
       const forgotWrapper   = $("forgot-email-wrapper");
       const forgotEmail     = $("forgot-email");
       const sendResetBtn    = $("send-reset-btn");
+      const alreadyLoggedIn = $("already-logged-in");
+      const loggedInAs      = $("logged-in-as");
 
       function showStatus(type, msg) {
         if (!statusBox) return alert(msg);
@@ -184,9 +282,9 @@
       function clearStatus() { if (statusBox) statusBox.style.display = "none"; }
 
       // Safety check
-      if (!signupBtn || !loginBtn || !forgotBtn) {
-        showStatus("err", "Critical error: Auth buttons missing. Hard refresh or check HTML.");
-        console.error("Missing auth buttons");
+      if (!signupBtn || !loginBtn || !forgotBtn || !forgotWrapper) {
+        showStatus("err", "Auth elements missing – hard refresh (Ctrl+Shift+R) or re-upload file.");
+        console.error("Missing elements");
         return;
       }
 
@@ -210,7 +308,7 @@
         clearStatus();
         signupBtn.disabled = true;
 
-        const email = $("signup-email").value.trim();
+        const email    = $("signup-email").value.trim();
         const password = $("signup-password").value;
 
         if (!email || !password || password.length < 6) {
@@ -236,7 +334,7 @@
         }
 
         console.log("Signup success:", data);
-        showStatus("ok", "Account created! Check your email (including spam) for confirmation link.");
+        showStatus("ok", "Account created! Check your email (spam too) for confirmation link.");
         setTab(false);
         $("login-email").value = email;
       });
@@ -247,7 +345,7 @@
         clearStatus();
         loginBtn.disabled = true;
 
-        const email = $("login-email").value.trim();
+        const email    = $("login-email").value.trim();
         const password = $("login-password").value;
 
         if (!email || !password) {
@@ -272,7 +370,7 @@
 
       // FORGOT PASSWORD – show input field
       forgotBtn.addEventListener("click", () => {
-        console.log("Forgot password clicked");
+        console.log("Forgot password clicked – showing input");
         clearStatus();
         forgotWrapper.classList.remove("hidden");
         forgotEmail.focus();
@@ -310,7 +408,7 @@
     });
   </script>
 
-  <!-- Splash -->
+  <!-- Splash control -->
   <script>
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
