@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>meet4 — Real hangs, right nearby</title>
-  <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
-  
-  <!-- Tailwind CDN (dev only) -->
+  <title>meet4 — App</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -26,131 +24,84 @@
     }
   </script>
 
-  <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    #splash {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: #111827;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity 0.8s ease-out;
-      cursor: pointer;
-    }
-    #splash.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #splash video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    #skip-btn {
-      position: absolute;
-      bottom: 30px;
-      padding: 12px 24px;
-      background: rgba(255,255,255,0.25);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 9999px;
-      font-weight: 500;
-      cursor: pointer;
-      z-index: 10000;
-      transition: all 0.2s;
-    }
-    #skip-btn:hover { background: rgba(255,255,255,0.4); }
-  </style>
+  <style> body { font-family: 'Inter', system-ui, sans-serif; } </style>
 </head>
 
-<body class="bg-neutral text-textDark antialiased">
+<body class="bg-neutral text-textDark">
+  <div class="max-w-5xl mx-auto px-6 py-10">
 
-<!-- Splash -->
-<div id="splash">
-  <video id="introVideo" autoplay muted playsinline playbackRate="0.5">
-    <source src="meet4.mp4" type="video/mp4">
-  </video>
-  <button id="skip-btn">Skip Intro</button>
-</div>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold">meet4 — app</h1>
+        <p class="text-textMuted mt-1">This is your logged-in area. Next we’ll build events, maps, and hosting.</p>
+      </div>
 
-<div id="main-content" class="hidden">
-
-<!-- HERO -->
-<header class="relative bg-white">
-  <div class="max-w-7xl mx-auto px-6 py-24 md:py-32 lg:py-40 text-center">
-    <img src="logo.jpg" class="mx-auto h-64 md:h-80 lg:h-96 w-auto mb-10 object-contain"/>
-    <p class="text-xl md:text-2xl lg:text-3xl text-textMuted max-w-4xl mx-auto leading-relaxed font-medium">
-      Casual hangouts happening near you — right now.
-    </p>
-  </div>
-</header>
-
-<!-- SIGNUP -->
-<section class="py-16 bg-white">
-  <div class="max-w-md mx-auto px-6">
-    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
-      <h3 class="text-2xl font-bold text-center mb-6">Join the beta now</h3>
-
-      <form id="signup-form">
-        <input type="email" id="email" required class="w-full mb-4 px-4 py-3 border rounded-lg" placeholder="you@example.com"/>
-        <input type="password" id="password" required minlength="6" class="w-full mb-6 px-4 py-3 border rounded-lg" placeholder="Password"/>
-        <button type="submit" class="w-full py-4 bg-primary text-white font-semibold rounded-xl">Create account</button>
-      </form>
-
+      <div class="flex gap-3">
+        <a href="./index.html" class="px-5 py-3 rounded-xl border border-gray-300 hover:bg-white transition font-semibold">
+          ← Back to landing
+        </a>
+        <button id="logout-btn" class="px-5 py-3 rounded-xl bg-textDark text-white hover:opacity-90 transition font-semibold">
+          Log out
+        </button>
+      </div>
     </div>
+
+    <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+      <h2 class="text-xl font-semibold">Session</h2>
+      <p id="session-line" class="mt-2 text-textMuted">Checking session…</p>
+    </div>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold mb-2">Next build (suggested)</h3>
+        <ul class="list-disc pl-5 text-textMuted space-y-2">
+          <li>Profiles table (display name, photo)</li>
+          <li>Events table (title, location, time, tags)</li>
+          <li>RLS policies (safe with public key)</li>
+          <li>“Host an event” form</li>
+          <li>Event feed (today / tomorrow)</li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold mb-2">Notes</h3>
+        <p class="text-textMuted">
+          Payments/subscriptions stay web-first later (Stripe) if you want to avoid App Store commission.
+          This page can evolve into your real web app.
+        </p>
+      </div>
+    </div>
+
   </div>
-</section>
 
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const supabase = window.supabase.createClient(
-  "https://hvzyndiuxivlwfjcvdls.supabase.co",
-  "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c"
-);
+    const sessionLine = document.getElementById("session-line");
+    const logoutBtn = document.getElementById("logout-btn");
 
-// SIGNUP HANDLER
-document.getElementById("signup-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    async function requireAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+      if (!session?.user) {
+        // Not logged in — back to landing login tab
+        window.location.href = "./index.html#login";
+        return;
+      }
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+      sessionLine.textContent = `Signed in as ${session.user.email}`;
+    }
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "./index.html#login";
+    });
 
-  alert("Account created. Check your email to confirm.");
-});
-</script>
-
-<!-- SPLASH SCRIPT -->
-<script>
-const splash = document.getElementById('splash');
-const mainContent = document.getElementById('main-content');
-const video = document.getElementById('introVideo');
-const skipBtn = document.getElementById('skip-btn');
-
-function closeSplash() {
-  splash.classList.add('hidden');
-  mainContent.classList.remove('hidden');
-  video.pause();
-}
-
-video.onended = closeSplash;
-skipBtn.onclick = closeSplash;
-setTimeout(closeSplash, 25000);
-</script>
-
+    requireAuth();
+  </script>
 </body>
 </html>
