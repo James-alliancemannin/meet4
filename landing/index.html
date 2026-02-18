@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — Real hangs, right nearby</title>
   <meta name="description" content="Host or join small, casual meetups in your neighborhood. Coffee, walks, games, workouts — no pressure, just people showing up." />
-  
+
   <!-- Tailwind CDN (dev only) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -95,26 +95,26 @@
     <!-- Hero -->
     <header class="relative bg-white">
       <div class="max-w-7xl mx-auto px-6 py-24 md:py-32 lg:py-40 text-center">
-        <img 
-          src="logo.jpg" 
-          alt="meet4 logo" 
+        <img
+          src="logo.jpg"
+          alt="meet4 logo"
           class="mx-auto h-64 md:h-80 lg:h-96 w-auto mb-10 object-contain"
         />
-        
+
         <p class="text-xl md:text-2xl lg:text-3xl text-textMuted max-w-4xl mx-auto leading-relaxed font-medium">
           Casual hangouts happening near you — right now.
         </p>
         <p class="mt-6 text-lg md:text-xl text-textMuted max-w-3xl mx-auto">
-          Walks, coffee runs, board games, park workouts, quiet reading spots. 
+          Walks, coffee runs, board games, park workouts, quiet reading spots.
           Small groups, real people, zero pressure. Just show up and see who’s around.
         </p>
 
         <div class="mt-12 flex flex-col sm:flex-row justify-center gap-5">
-          <a href="#get-started" 
+          <a href="#get-started"
              class="inline-flex items-center px-10 py-5 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg hover:shadow-xl text-xl">
             Find hangs near me →
           </a>
-          <a href="#auth" 
+          <a href="#auth"
              class="inline-flex items-center px-10 py-5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-accentSoft transition text-xl">
             Host something simple
           </a>
@@ -154,13 +154,12 @@
           </div>
 
           <!-- SIGN UP FORM -->
-          <form id="signup-form" autocomplete="on">
+          <form id="signup-form" autocomplete="on" novalidate>
             <div class="mb-5">
               <label for="signup-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
-              <input 
-                type="email" 
-                id="signup-email" 
-                required 
+              <input
+                type="email"
+                id="signup-email"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="you@example.com"
                 autocomplete="email"
@@ -168,18 +167,16 @@
             </div>
             <div class="mb-6">
               <label for="signup-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
-              <input 
-                type="password" 
-                id="signup-password" 
-                required 
-                minlength="6"
+              <input
+                type="password"
+                id="signup-password"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="At least 6 characters"
                 autocomplete="new-password"
               />
             </div>
 
-            <button 
+            <button
               id="signup-btn"
               type="submit"
               class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg"
@@ -189,13 +186,12 @@
           </form>
 
           <!-- LOGIN FORM -->
-          <form id="login-form" class="hidden" autocomplete="on">
+          <form id="login-form" class="hidden" autocomplete="on" novalidate>
             <div class="mb-5">
               <label for="login-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
-              <input 
-                type="email" 
-                id="login-email" 
-                required 
+              <input
+                type="email"
+                id="login-email"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="you@example.com"
                 autocomplete="email"
@@ -203,18 +199,16 @@
             </div>
             <div class="mb-4">
               <label for="login-password" class="block text-sm font-medium text-textMuted mb-2">Password</label>
-              <input 
-                type="password" 
-                id="login-password" 
-                required 
-                minlength="6"
+              <input
+                type="password"
+                id="login-password"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Your password"
                 autocomplete="current-password"
               />
             </div>
 
-            <button 
+            <button
               id="login-btn"
               type="submit"
               class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg"
@@ -244,7 +238,7 @@
     <section class="py-20 md:py-28 bg-white">
       <div class="max-w-5xl mx-auto px-6 text-center">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-12">Connection shouldn’t feel this hard</h2>
-        
+
         <div class="grid md:grid-cols-3 gap-8 text-left">
           <div class="p-8 border-t-4 border-accent rounded-xl bg-white shadow-sm">
             <p class="text-xl font-medium mb-4">Done with endless scrolling</p>
@@ -265,68 +259,50 @@
       </div>
     </section>
 
- <!-- Features -->
-<section class="py-20 md:py-28 bg-neutral">
-  <div class="max-w-7xl mx-auto px-6">
-    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
-    
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-      <!-- 1. See what’s on nearby -->
-      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-          🗺️
-        </div>
-        <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
-        <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
-      </div>
+    <!-- Features -->
+    <section class="py-20 md:py-28 bg-neutral">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">How meet4 actually works</h2>
 
-      <!-- 2. Host in 30 seconds -->
-      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-          ➕
-        </div>
-        <h3 class="text-2xl font-semibold mb-4">Host in 30 seconds</h3>
-        <p class="text-textMuted">Pick spot, time, activity. Public or invite-only. No long forms.</p>
-      </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🗺️</div>
+            <h3 class="text-2xl font-semibold mb-4">See what’s on nearby</h3>
+            <p class="text-textMuted">Map shows real hangs today or tomorrow — filter by vibe, time, distance.</p>
+          </div>
 
-      <!-- 3. Vetted & kind-first -->
-      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-          🤝
-        </div>
-        <h3 class="text-2xl font-semibold mb-4">Vetted & kind-first</h3>
-        <p class="text-textMuted">DM approval for private groups. Report/block easy. Safe & welcoming.</p>
-      </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">➕</div>
+            <h3 class="text-2xl font-semibold mb-4">Host in 30 seconds</h3>
+            <p class="text-textMuted">Pick spot, time, activity. Public or invite-only. No long forms.</p>
+          </div>
 
-      <!-- 4. Build your circle -->
-      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-          🔄
-        </div>
-        <h3 class="text-2xl font-semibold mb-4">Build your circle</h3>
-        <p class="text-textMuted">Recurring hangs appear automatically. Familiar faces, real friendships.</p>
-      </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🤝</div>
+            <h3 class="text-2xl font-semibold mb-4">Vetted & kind-first</h3>
+            <p class="text-textMuted">DM approval for private groups. Report/block easy. Safe & welcoming.</p>
+          </div>
 
-      <!-- 5. Mobile-first, simple -->
-      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-          📱
-        </div>
-        <h3 class="text-2xl font-semibold mb-4">Mobile-first, simple</h3>
-        <p class="text-textMuted">iOS & Android coming soon. Web works great right now.</p>
-      </div>
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🔄</div>
+            <h3 class="text-2xl font-semibold mb-4">Build your circle</h3>
+            <p class="text-textMuted">Recurring hangs appear automatically. Familiar faces, real friendships.</p>
+          </div>
 
-      <!-- 6. Open to everyone -->
-      <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
-        <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">
-          🌍
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">📱</div>
+            <h3 class="text-2xl font-semibold mb-4">Mobile-first, simple</h3>
+            <p class="text-textMuted">iOS & Android coming soon. Web works great right now.</p>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+            <div class="text-6xl mb-6 w-20 h-20 flex items-center justify-center rounded-xl bg-accent/10 text-accent mx-auto">🌍</div>
+            <h3 class="text-2xl font-semibold mb-4">Open to everyone</h3>
+            <p class="text-textMuted">All identities, all vibes. Tag groups as queer-friendly, ally-welcome, etc.</p>
+          </div>
         </div>
-        <h3 class="text-2xl font-semibold mb-4">Open to everyone</h3>
-        <p class="text-textMuted">All identities, all vibes. Tag groups as queer-friendly, ally-welcome, etc.</p>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
     <!-- Final CTA -->
     <section id="get-started" class="py-24 md:py-32 bg-gradient-to-br from-primary to-accent text-white text-center">
@@ -365,13 +341,15 @@
 
   </div>
 
-  <!-- Supabase + Auth logic -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 1) Supabase JS (UMD build, reliable window.supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
+
+  <!-- 2) Auth logic (hardened) -->
   <script>
     // --- Supabase config ---
+    // NOTE: this is a "publishable/anon" key and is expected to be public.
     const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // --- DOM ---
     const statusBox = document.getElementById("auth-status");
@@ -397,9 +375,50 @@
       statusBox.style.display = "none";
     }
 
+    // Prevent "mystery refresh" even if later JS crashes:
+    signupForm.addEventListener("submit", (e) => e.preventDefault());
+    loginForm.addEventListener("submit", (e) => e.preventDefault());
+
+    // Show JS errors in the UI
+    window.addEventListener("error", (e) => {
+      showStatus("err", "JavaScript error: " + e.message);
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+      const msg = (e.reason && (e.reason.message || String(e.reason))) || "Unknown error";
+      showStatus("err", "Unhandled promise rejection: " + msg);
+    });
+
+    // Warn if running as file:// (strongly discouraged for auth)
+    if (location.protocol === "file:") {
+      showStatus("err",
+        "You are running this as a local file (file://). Supabase Auth is designed for http/https. " +
+        "Use VS Code Live Server or deploy (GitHub Pages/Netlify), then try again."
+      );
+    }
+
+    // Ensure Supabase loaded
+    if (!window.supabase || typeof window.supabase.createClient !== "function") {
+      showStatus("err",
+        "Supabase JS failed to load. Check adblock/CSP or the Supabase <script src=...> URL."
+      );
+    }
+
+    // Create client (only if library exists)
+    const supabase = (window.supabase && typeof window.supabase.createClient === "function")
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+      : null;
+
+    // Simple validators
+    function isValidEmail(email) {
+      // pragmatic check; browser-level validation is inconsistent with novalidate
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function isValidPassword(pw) {
+      return typeof pw === "string" && pw.length >= 6;
+    }
+
     function setTab(which) {
       clearStatus();
-
       const isSignup = which === "signup";
       signupForm.classList.toggle("hidden", !isSignup);
       loginForm.classList.toggle("hidden", isSignup);
@@ -415,23 +434,37 @@
 
     tabSignup.addEventListener("click", () => setTab("signup"));
     tabLogin.addEventListener("click", () => setTab("login"));
-
-    // default state
     setTab("signup");
 
+    // Build redirect URL safely (works with /, /index.html, GitHub Pages subpaths, etc.)
+    function getAppRedirectUrl() {
+      return new URL("app.html", window.location.href).toString();
+    }
+
     // Create account
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    signupForm.addEventListener("submit", async () => {
+      if (!supabase) return; // error already shown
+
       clearStatus();
       signupBtn.disabled = true;
-      showStatus("info", "Creating your account…");
 
       const email = document.getElementById("signup-email").value.trim();
       const password = document.getElementById("signup-password").value;
 
-      const redirectTo = location.origin + location.pathname.replace(/index\.html$/, "app.html");
+      if (!isValidEmail(email)) {
+        signupBtn.disabled = false;
+        return showStatus("err", "Please enter a valid email address.");
+      }
+      if (!isValidPassword(password)) {
+        signupBtn.disabled = false;
+        return showStatus("err", "Password must be at least 6 characters.");
+      }
 
-      const { error } = await supabase.auth.signUp({
+      showStatus("info", "Creating your account…");
+
+      const redirectTo = getAppRedirectUrl();
+
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { emailRedirectTo: redirectTo }
@@ -441,21 +474,40 @@
 
       if (error) return showStatus("err", error.message);
 
-      showStatus("ok", "Account created. Check your email to confirm, then return here and log in.");
-      setTab("login");
-      document.getElementById("login-email").value = email;
-      document.getElementById("login-password").focus();
+      // If email confirmations are ON, Supabase returns user but no session
+      const needsEmailConfirm = !data?.session;
+
+      if (needsEmailConfirm) {
+        showStatus("ok", "Account created. Check your email to confirm, then return here and log in.");
+        setTab("login");
+        document.getElementById("login-email").value = email;
+        document.getElementById("login-password").focus();
+      } else {
+        showStatus("ok", "Account created and signed in. Redirecting…");
+        window.location.href = "./app.html";
+      }
     });
 
     // Log in -> app.html
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    loginForm.addEventListener("submit", async () => {
+      if (!supabase) return; // error already shown
+
       clearStatus();
       loginBtn.disabled = true;
-      showStatus("info", "Logging you in…");
 
       const email = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value;
+
+      if (!isValidEmail(email)) {
+        loginBtn.disabled = false;
+        return showStatus("err", "Please enter a valid email address.");
+      }
+      if (!isValidPassword(password)) {
+        loginBtn.disabled = false;
+        return showStatus("err", "Password must be at least 6 characters.");
+      }
+
+      showStatus("info", "Logging you in…");
 
       const { error } = await supabase.auth.signInWithPassword({ email, password });
 
@@ -469,22 +521,32 @@
 
     // Forgot password
     forgotBtn.addEventListener("click", async () => {
+      if (!supabase) return;
+
       clearStatus();
       const email = document.getElementById("login-email").value.trim();
-      if (!email) return showStatus("err", "Enter your email above first, then click Forgot password.");
+
+      if (!isValidEmail(email)) {
+        return showStatus("err", "Enter your email above first, then click Forgot password.");
+      }
 
       showStatus("info", "Sending reset email…");
-      const redirectTo = location.origin + location.pathname.replace(/index\.html$/, "app.html");
 
+      const redirectTo = getAppRedirectUrl();
       const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-      if (error) return showStatus("err", error.message);
 
+      if (error) return showStatus("err", error.message);
       showStatus("ok", "Password reset email sent. Check your inbox.");
     });
 
     // Logged-in banner
     async function refreshLoggedInBanner() {
-      const { data: { session } } = await supabase.auth.getSession();
+      if (!supabase) return;
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        // not fatal, but visible
+        return showStatus("err", error.message);
+      }
       if (session?.user) {
         alreadyLoggedIn.classList.remove("hidden");
         loggedInAs.textContent = `Signed in as ${session.user.email}`;
@@ -493,11 +555,14 @@
         loggedInAs.textContent = "";
       }
     }
-    supabase.auth.onAuthStateChange(() => refreshLoggedInBanner());
-    refreshLoggedInBanner();
+
+    if (supabase) {
+      supabase.auth.onAuthStateChange(() => refreshLoggedInBanner());
+      refreshLoggedInBanner();
+    }
   </script>
 
-  <!-- Splash control -->
+  <!-- 3) Splash control -->
   <script>
     const splash = document.getElementById('splash');
     const mainContent = document.getElementById('main-content');
