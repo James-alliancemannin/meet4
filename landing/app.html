@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — App</title>
 
+  <!-- Tailwind CDN (OK for prototype; ignore the "production" warning for now) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -106,20 +107,16 @@
     <div class="grid lg:grid-cols-[260px_1fr] gap-8">
       <aside class="hidden lg:block">
         <nav class="bg-white rounded-2xl border border-gray-200 shadow-sm p-3" aria-label="App sections" role="tablist">
-          <button id="tab-desktop-map" role="tab" data-tab="map" aria-controls="view-map" aria-selected="false" tabindex="-1"
-            class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
+          <button id="tab-desktop-map" role="tab" data-tab="map" aria-controls="view-map" aria-selected="false" tabindex="-1" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
             🗺️ <span>Map</span>
           </button>
-          <button id="tab-desktop-hangs" role="tab" data-tab="hangs" aria-controls="view-hangs" aria-selected="false" tabindex="-1"
-            class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
+          <button id="tab-desktop-hangs" role="tab" data-tab="hangs" aria-controls="view-hangs" aria-selected="false" tabindex="-1" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
             📌 <span>Hangs</span>
           </button>
-          <button id="tab-desktop-host" role="tab" data-tab="host" aria-controls="view-host" aria-selected="false" tabindex="-1"
-            class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
+          <button id="tab-desktop-host" role="tab" data-tab="host" aria-controls="view-host" aria-selected="false" tabindex="-1" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
             ➕ <span>Host</span>
           </button>
-          <button id="tab-desktop-profile" role="tab" data-tab="profile" aria-controls="view-profile" aria-selected="false" tabindex="-1"
-            class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
+          <button id="tab-desktop-profile" role="tab" data-tab="profile" aria-controls="view-profile" aria-selected="false" tabindex="-1" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
             👤 <span>Profile</span>
           </button>
         </nav>
@@ -140,12 +137,18 @@
               </p>
             </div>
             <div class="flex gap-3">
-              <button id="primary-action" type="button"
-                class="px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition shadow-lg">
+              <button
+                id="primary-action"
+                type="button"
+                class="px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition shadow-lg"
+              >
                 ➕ Host a hang
               </button>
-              <button id="secondary-action" type="button"
-                class="px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition font-semibold">
+              <button
+                id="secondary-action"
+                type="button"
+                class="px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition font-semibold"
+              >
                 🗺️ Open map
               </button>
             </div>
@@ -287,10 +290,13 @@
               </div>
 
               <div class="mt-6 grid lg:grid-cols-3 gap-6">
+                <!-- Left: identity card -->
                 <div class="lg:col-span-1 p-6 rounded-2xl border border-gray-200">
                   <div class="flex items-center gap-4">
                     <div class="relative">
-                      <img id="profile-avatar-img" class="w-16 h-16 rounded-full object-cover border border-gray-200 hidden" alt="Avatar"/>
+                      <img id="profile-avatar-img"
+                           class="w-16 h-16 rounded-full object-cover border border-gray-200 hidden"
+                           alt="Avatar"/>
                       <div id="profile-avatar-fallback"
                            class="w-16 h-16 rounded-full bg-accentSoft flex items-center justify-center text-primary font-bold text-2xl border border-emerald-100">
                         M
@@ -320,17 +326,19 @@
                   </div>
                 </div>
 
+                <!-- Right: editor -->
                 <div class="lg:col-span-2 p-6 rounded-2xl border border-gray-200">
                   <div class="grid md:grid-cols-2 gap-5">
-                    <div>
+                    <div class="md:col-span-1">
                       <label class="block text-sm font-medium text-textMuted mb-2">Display name</label>
-                      <input id="display-name-input" maxlength="40"
+                      <input id="display-name-input"
+                             maxlength="40"
                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                              placeholder="e.g. Barry" />
                       <div class="mt-1 text-xs text-textMuted"><span id="dn-count">0</span>/40</div>
                     </div>
 
-                    <div>
+                    <div class="md:col-span-1">
                       <label class="block text-sm font-medium text-textMuted mb-2">Identity</label>
                       <div class="grid grid-cols-5 gap-2" id="gender-grid"></div>
                       <div class="mt-2 text-xs text-textMuted">Pick one. (You can rename these later.)</div>
@@ -338,7 +346,9 @@
 
                     <div class="md:col-span-2">
                       <label class="block text-sm font-medium text-textMuted mb-2">Bio</label>
-                      <textarea id="bio-input" maxlength="240" rows="4"
+                      <textarea id="bio-input"
+                                maxlength="240"
+                                rows="4"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                                 placeholder="A couple of lines. Keep it light."></textarea>
                       <div class="mt-1 text-xs text-textMuted"><span id="bio-count">0</span>/240</div>
@@ -360,6 +370,12 @@
                         Back to landing
                       </a>
                     </div>
+
+                    <div class="md:col-span-2">
+                      <p class="text-xs text-textMuted">
+                        Debug: if avatar doesn’t show, open DevTools → Console and look for “Signed URL error” or “Upload failed”.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -372,22 +388,19 @@
     </div>
   </div>
 
+  <!-- Bottom tab bar (mobile) -->
   <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-bottom z-50" aria-label="Mobile app sections" role="tablist">
     <div class="max-w-7xl mx-auto px-6 py-2 grid grid-cols-4 gap-2">
-      <button role="tab" data-tab="map" aria-controls="view-map" aria-selected="false" tabindex="-1"
-        class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
+      <button id="tab-mobile-map" role="tab" data-tab="map" aria-controls="view-map" aria-selected="false" tabindex="-1" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
         <span class="text-xl">🗺️</span><span>Map</span>
       </button>
-      <button role="tab" data-tab="hangs" aria-controls="view-hangs" aria-selected="false" tabindex="-1"
-        class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
+      <button id="tab-mobile-hangs" role="tab" data-tab="hangs" aria-controls="view-hangs" aria-selected="false" tabindex="-1" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
         <span class="text-xl">📌</span><span>Hangs</span>
       </button>
-      <button role="tab" data-tab="host" aria-controls="view-host" aria-selected="false" tabindex="-1"
-        class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
+      <button id="tab-mobile-host" role="tab" data-tab="host" aria-controls="view-host" aria-selected="false" tabindex="-1" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
         <span class="text-xl">➕</span><span>Host</span>
       </button>
-      <button role="tab" data-tab="profile" aria-controls="view-profile" aria-selected="false" tabindex="-1"
-        class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
+      <button id="tab-mobile-profile" role="tab" data-tab="profile" aria-controls="view-profile" aria-selected="false" tabindex="-1" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
         <span class="text-xl">👤</span><span>Me</span>
       </button>
     </div>
@@ -397,28 +410,27 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <script>
-    // ---- Config ----
+    // --------- CONFIG ----------
     const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
 
-    // IMPORTANT: avoid naming collision with global "supabase"
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    // If your table is named Profiles (capital P), keep this as "Profiles"
-    // If you rename it to lowercase, change to "profiles"
+    // IMPORTANT CHANGE: your actual table is "Profiles" (capital P) per your screenshots
     const PROFILES_TABLE = "Profiles";
     const AVATAR_BUCKET = "avatars";
+    // ---------------------------
 
-    // ---- DOM ----
+    // Avoid the previous "redeclaration of supabase" bug:
+    // DO NOT create a const named "supabase" when the UMD already uses window.supabase.
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // DOM
     const sessionLine = document.getElementById("session-line");
     const profileEmail = document.getElementById("profile-email");
     const profileEmail2 = document.getElementById("profile-email-2");
     const profileEmail3 = document.getElementById("profile-email-3");
-
     const logoutBtn = document.getElementById("logout-btn");
     const logoutBtn2 = document.getElementById("logout-btn-2");
     const goLandingBtn = document.getElementById("go-landing-btn");
-
     const profileBtn = document.getElementById("profile-btn");
     const profileMenu = document.getElementById("profile-menu");
     const topbarBadge = document.getElementById("topbar-badge");
@@ -440,9 +452,92 @@
     const avatarImg = document.getElementById("profile-avatar-img");
     const avatarFallback = document.getElementById("profile-avatar-fallback");
 
-    // ---- Helpers ----
-    function goToAuth() { window.location.href = "./index.html#auth"; }
+    // Routing
+    function goToAuth() {
+      window.location.href = "./index.html#auth";
+    }
 
+    // Tabs
+    const views = {
+      map: document.getElementById("view-map"),
+      hangs: document.getElementById("view-hangs"),
+      host: document.getElementById("view-host"),
+      profile: document.getElementById("view-profile"),
+    };
+
+    function setActiveTab(tab) {
+      Object.entries(views).forEach(([k, el]) => {
+        const isActive = k === tab;
+        el.classList.toggle("hidden", !isActive);
+        el.setAttribute("aria-hidden", String(!isActive));
+      });
+
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        const active = btn.dataset.tab === tab;
+        btn.classList.toggle("bg-accentSoft", active);
+        btn.classList.toggle("text-textDark", active);
+        btn.setAttribute("aria-selected", String(active));
+        btn.setAttribute("tabindex", active ? "0" : "-1");
+      });
+      document.querySelectorAll(".tab-btn-mobile").forEach(btn => {
+        const active = btn.dataset.tab === tab;
+        btn.classList.toggle("bg-accentSoft", active);
+        btn.setAttribute("aria-selected", String(active));
+        btn.setAttribute("tabindex", active ? "0" : "-1");
+      });
+
+      history.replaceState(null, "", `#${tab}`);
+    }
+
+    document.querySelectorAll("[data-tab]").forEach(btn => {
+      btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
+      btn.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        const peers = Array.from(btn.parentElement.querySelectorAll("[data-tab]"));
+        const currentIndex = peers.indexOf(btn);
+        if (currentIndex < 0) return;
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = (currentIndex + direction + peers.length) % peers.length;
+        const nextBtn = peers[nextIndex];
+        setActiveTab(nextBtn.dataset.tab);
+        nextBtn.focus();
+        event.preventDefault();
+      });
+    });
+
+    const initialTab = (location.hash || "#map").replace("#", "");
+    setActiveTab(Object.prototype.hasOwnProperty.call(views, initialTab) ? initialTab : "map");
+
+    // Dropdown
+    function closeMenu() {
+      profileMenu.classList.add("hidden");
+      profileBtn.setAttribute("aria-expanded", "false");
+    }
+    function toggleMenu() {
+      const isHidden = profileMenu.classList.contains("hidden");
+      profileMenu.classList.toggle("hidden", !isHidden);
+      profileBtn.setAttribute("aria-expanded", String(isHidden));
+    }
+    profileBtn.addEventListener("click", toggleMenu);
+    document.addEventListener("click", (e) => {
+      if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) closeMenu();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+
+    goLandingBtn.addEventListener("click", () => (window.location.href = "./index.html"));
+
+    async function doLogout() {
+      logoutBtn.disabled = true;
+      logoutBtn2.disabled = true;
+      await sb.auth.signOut();
+      goToAuth();
+    }
+    logoutBtn.addEventListener("click", doLogout);
+    logoutBtn2.addEventListener("click", doLogout);
+
+    // UI helpers
     function setStatus(msg, kind = "muted") {
       profileStatus.textContent = msg || "";
       profileStatus.className = kind === "error"
@@ -470,78 +565,7 @@
       }
     }
 
-    // ---- Tabs ----
-    const views = {
-      map: document.getElementById("view-map"),
-      hangs: document.getElementById("view-hangs"),
-      host: document.getElementById("view-host"),
-      profile: document.getElementById("view-profile"),
-    };
-
-    function setActiveTab(tab) {
-      Object.entries(views).forEach(([k, el]) => {
-        const isActive = k === tab;
-        el.classList.toggle("hidden", !isActive);
-        el.setAttribute("aria-hidden", String(!isActive));
-      });
-
-      document.querySelectorAll(".tab-btn").forEach(btn => {
-        const active = btn.dataset.tab === tab;
-        btn.classList.toggle("bg-accentSoft", active);
-        btn.classList.toggle("text-textDark", active);
-        btn.setAttribute("aria-selected", String(active));
-        btn.setAttribute("tabindex", active ? "0" : "-1");
-      });
-
-      document.querySelectorAll(".tab-btn-mobile").forEach(btn => {
-        const active = btn.dataset.tab === tab;
-        btn.classList.toggle("bg-accentSoft", active);
-        btn.setAttribute("aria-selected", String(active));
-        btn.setAttribute("tabindex", active ? "0" : "-1");
-      });
-
-      history.replaceState(null, "", `#${tab}`);
-    }
-
-    document.querySelectorAll("[data-tab]").forEach(btn => {
-      btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
-    });
-
-    const initialTab = (location.hash || "#map").replace("#", "");
-    setActiveTab(Object.prototype.hasOwnProperty.call(views, initialTab) ? initialTab : "map");
-
-    // Top buttons to tabs
-    document.getElementById("primary-action").addEventListener("click", () => setActiveTab("host"));
-    document.getElementById("secondary-action").addEventListener("click", () => setActiveTab("map"));
-
-    // ---- Dropdown ----
-    function closeMenu() {
-      profileMenu.classList.add("hidden");
-      profileBtn.setAttribute("aria-expanded", "false");
-    }
-    function toggleMenu() {
-      const isHidden = profileMenu.classList.contains("hidden");
-      profileMenu.classList.toggle("hidden", !isHidden);
-      profileBtn.setAttribute("aria-expanded", String(isHidden));
-    }
-    profileBtn.addEventListener("click", toggleMenu);
-    document.addEventListener("click", (e) => {
-      if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) closeMenu();
-    });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
-
-    goLandingBtn.addEventListener("click", () => (window.location.href = "./index.html"));
-
-    async function doLogout() {
-      logoutBtn.disabled = true;
-      logoutBtn2.disabled = true;
-      await sb.auth.signOut();
-      goToAuth();
-    }
-    logoutBtn.addEventListener("click", doLogout);
-    logoutBtn2.addEventListener("click", doLogout);
-
-    // ---- Gender buttons ----
+    // Gender options
     const GENDERS = [
       { code: "male", label: "Male", icon: "♂️" },
       { code: "female", label: "Female", icon: "♀️" },
@@ -575,14 +599,20 @@
     dnInput.addEventListener("input", () => dnCount.textContent = String(dnInput.value.length));
     bioInput.addEventListener("input", () => bioCount.textContent = String(bioInput.value.length));
 
-    // ---- Auth / profile data ----
+    // Auth guard
     async function getSessionUserOrRedirect() {
-      const { data: { session } } = await sb.auth.getSession();
+      const { data: { session }, error } = await sb.auth.getSession();
+      if (error) console.warn("getSession error:", error);
+
       const user = session?.user;
-      if (!user) { goToAuth(); return null; }
+      if (!user) {
+        goToAuth();
+        return null;
+      }
       return user;
     }
 
+    // Ensure row exists
     async function ensureProfileRow(user) {
       const { data: existing, error: selErr } = await sb
         .from(PROFILES_TABLE)
@@ -593,17 +623,21 @@
       if (selErr) throw selErr;
       if (existing) return existing;
 
-      // Insert minimal row
+      // Insert minimal row. (RLS policy must allow id = auth.uid())
+      const insertPayload = {
+        id: user.id,
+        display_name: null,
+        bio: null,
+        gender_code: null,
+        avatar_url: null,
+        // We set these explicitly because your DB columns currently have NULL defaults
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
       const { data: inserted, error: insErr } = await sb
         .from(PROFILES_TABLE)
-        .insert({
-          id: user.id,
-          display_name: null,
-          bio: null,
-          gender_code: null,
-          avatar_url: null,
-          updated_at: new Date().toISOString(),
-        })
+        .insert(insertPayload)
         .select("id, display_name, bio, gender_code, avatar_url, created_at, updated_at")
         .single();
 
@@ -649,34 +683,54 @@
     }
 
     async function refreshAvatarSignedUrl(avatarPath) {
-      if (!avatarPath) { setAvatarVisible(null); return; }
+      if (!avatarPath) {
+        setAvatarVisible(null);
+        return;
+      }
 
-      const { data, error } = await sb.storage.from(AVATAR_BUCKET).createSignedUrl(avatarPath, 3600);
+      const { data, error } = await sb
+        .storage
+        .from(AVATAR_BUCKET)
+        .createSignedUrl(avatarPath, 3600);
+
       if (error) {
         console.warn("Signed URL error:", error);
         setAvatarVisible(null);
         return;
       }
-      setAvatarVisible(data.signedUrl);
+
+      // Force reload even if same URL by adding a cache-buster
+      const signed = data.signedUrl;
+      const buster = (signed.includes("?") ? "&" : "?") + "t=" + Date.now();
+      setAvatarVisible(signed + buster);
     }
 
     async function uploadAvatar(user, file) {
       setStatus("Uploading photo…");
 
       const ext = extFromMimeOrName(file);
-      const avatarPath = `${user.id}/avatar.${ext}`;
+      const avatarPath = `${user.id}/avatar.${ext}`; // MUST be inside <uid>/ for your policies
 
-      const { error: upErr } = await sb.storage.from(AVATAR_BUCKET).upload(avatarPath, file, {
-        upsert: true,
-        contentType: file.type || undefined,
-        cacheControl: "3600",
-      });
+      const { error: upErr } = await sb
+        .storage
+        .from(AVATAR_BUCKET)
+        .upload(avatarPath, file, {
+          upsert: true,
+          contentType: file.type || undefined,
+          cacheControl: "0", // reduce caching headaches while testing
+        });
+
       if (upErr) throw upErr;
 
+      // Save path into profile table column "avatar_url"
       const { error: profErr } = await sb
         .from(PROFILES_TABLE)
-        .update({ avatar_url: avatarPath, updated_at: new Date().toISOString() })
+        .update({
+          avatar_url: avatarPath,
+          updated_at: new Date().toISOString(),
+        })
         .eq("id", user.id);
+
       if (profErr) throw profErr;
 
       await refreshAvatarSignedUrl(avatarPath);
@@ -693,12 +747,16 @@
         .select("avatar_url")
         .eq("id", user.id)
         .maybeSingle();
+
       if (selErr) throw selErr;
 
       const avatarPath = row?.avatar_url;
-
       if (avatarPath) {
-        const { error: delErr } = await sb.storage.from(AVATAR_BUCKET).remove([avatarPath]);
+        const { error: delErr } = await sb
+          .storage
+          .from(AVATAR_BUCKET)
+          .remove([avatarPath]);
+
         if (delErr) throw delErr;
       }
 
@@ -706,6 +764,7 @@
         .from(PROFILES_TABLE)
         .update({ avatar_url: null, updated_at: new Date().toISOString() })
         .eq("id", user.id);
+
       if (updErr) throw updErr;
 
       setAvatarVisible(null);
@@ -722,6 +781,7 @@
       setInitialBadgeFromEmail(email);
 
       setStatus("Loading profile…");
+
       const profile = await ensureProfileRow(user);
 
       dnInput.value = profile.display_name || "";
@@ -734,12 +794,17 @@
       renderGenderButtons();
 
       profileName.textContent = profile.display_name || "Member";
+
       await refreshAvatarSignedUrl(profile.avatar_url);
 
       setStatus("");
     }
 
-    // ---- Wire buttons ----
+    // Top buttons to tabs
+    document.getElementById("primary-action").addEventListener("click", () => setActiveTab("host"));
+    document.getElementById("secondary-action").addEventListener("click", () => setActiveTab("map"));
+
+    // Profile actions
     profileSaveBtn.addEventListener("click", async () => {
       try {
         const user = await getSessionUserOrRedirect();
@@ -752,7 +817,6 @@
     });
 
     avatarPickBtn.addEventListener("click", () => avatarFile.click());
-
     avatarFile.addEventListener("change", async () => {
       try {
         const file = avatarFile.files?.[0];
@@ -791,7 +855,7 @@
       }
     });
 
-    // ---- Init ----
+    // Auth guard + init
     async function requireAuthAndInit() {
       const user = await getSessionUserOrRedirect();
       if (!user) return;
