@@ -5,24 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>meet4 — App</title>
 
+  <!-- Tailwind (prototype OK) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#10b981',
-            primaryDark: '#059669',
-            accent: '#22c55e',
-            accentSoft: '#ecfdf5',
-            neutral: '#f8fafc',
-            textDark: '#111827',
-            textMuted: '#6b7280',
-          }
-        }
-      }
-    }
-  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,808 +19,160 @@
 </head>
 
 <body class="bg-neutral text-textDark antialiased">
-  <!-- Top bar -->
+
+  <!-- HEADER -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <a href="./index.html" class="flex items-center gap-3">
-          <img src="logo.jpg" alt="meet4 logo" class="h-10 w-auto object-contain" />
-          <div class="leading-tight">
-            <div class="font-bold">meet4</div>
-            <div class="text-sm text-textMuted">App</div>
-          </div>
-        </a>
-      </div>
+      <a href="./index.html" class="flex items-center gap-3">
+        <img src="logo.jpg" class="h-10" />
+        <div>
+          <div class="font-bold">meet4</div>
+          <div class="text-sm text-gray-500">App</div>
+        </div>
+      </a>
 
       <div class="flex items-center gap-3">
-        <button
-          id="location-btn"
-          type="button"
-          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition text-sm font-semibold"
-          title="Location (placeholder)"
-        >
-          📍 <span id="location-label">Nearby</span>
-        </button>
-
         <div class="relative">
-          <button
-            id="profile-btn"
-            type="button"
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition text-sm font-semibold"
-            aria-haspopup="menu"
-            aria-expanded="false"
-          >
-            <span id="topbar-badge" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-accentSoft text-primary font-bold">M</span>
-            <span class="hidden sm:inline" id="profile-email">Loading…</span>
-            <span class="text-textMuted">▾</span>
+          <button id="profile-btn" class="px-4 py-2 border rounded-xl bg-white">
+            <span id="profile-email">Loading…</span>
           </button>
 
-          <div
-            id="profile-menu"
-            class="hidden absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden"
-            role="menu"
-          >
-            <div class="px-4 py-3 border-b border-gray-200">
-              <div class="text-sm font-semibold">Signed in</div>
-              <div class="text-sm text-textMuted truncate" id="profile-email-2">—</div>
-            </div>
-            <button
-              id="go-landing-btn"
-              class="w-full text-left px-4 py-3 hover:bg-gray-50 transition text-sm"
-              role="menuitem"
-              type="button"
-            >
-              ← Back to landing
-            </button>
-            <button
-              id="logout-btn"
-              class="w-full text-left px-4 py-3 hover:bg-gray-50 transition text-sm text-red-600 font-semibold"
-              role="menuitem"
-              type="button"
-            >
-              Log out
-            </button>
+          <div id="profile-menu" class="hidden absolute right-0 mt-2 w-64 bg-white border rounded-xl shadow">
+            <button id="logout-btn" class="w-full text-left px-4 py-3 text-red-600">Log out</button>
           </div>
         </div>
       </div>
     </div>
   </header>
 
-  <div class="max-w-7xl mx-auto px-6 py-8">
-    <div class="grid lg:grid-cols-[260px_1fr] gap-8">
-      <aside class="hidden lg:block">
-        <nav class="bg-white rounded-2xl border border-gray-200 shadow-sm p-3">
-          <button data-tab="map" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
-            🗺️ <span>Map</span>
-          </button>
-          <button data-tab="hangs" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
-            📌 <span>Hangs</span>
-          </button>
-          <button data-tab="host" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
-            ➕ <span>Host</span>
-          </button>
-          <button data-tab="profile" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold hover:bg-gray-50 transition">
-            👤 <span>Profile</span>
-          </button>
-        </nav>
+  <!-- LAYOUT -->
+  <div class="max-w-7xl mx-auto px-6 py-8 grid lg:grid-cols-[260px_1fr] gap-8">
 
-        <div class="mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-          <div class="text-sm font-semibold">Session</div>
-          <p class="mt-2 text-sm text-textMuted" id="session-line">Checking session…</p>
+    <!-- SIDEBAR -->
+    <aside>
+      <nav class="bg-white rounded-xl border p-3">
+        <button data-tab="map" class="tab-btn block w-full text-left px-4 py-3">Map</button>
+        <button data-tab="hangs" class="tab-btn block w-full text-left px-4 py-3">Hangs</button>
+        <button data-tab="host" class="tab-btn block w-full text-left px-4 py-3">Host</button>
+        <button data-tab="profile" class="tab-btn block w-full text-left px-4 py-3">Profile</button>
+      </nav>
+
+      <div class="mt-6 bg-white rounded-xl border p-5">
+        <div class="text-sm font-semibold">Session</div>
+        <p class="mt-2 text-sm text-gray-500" id="session-line">Checking session…</p>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+
+      <section class="bg-white rounded-xl border p-7">
+        <h1 class="text-3xl font-bold">Your meet4 space</h1>
+        <p class="mt-2 text-gray-500">Browse hangs or host something simple.</p>
+      </section>
+
+      <!-- PROFILE VIEW -->
+      <section id="view-profile" class="mt-8 hidden">
+        <div class="bg-white rounded-xl border p-6">
+          <h2 class="text-2xl font-bold">Profile</h2>
+
+          <div class="mt-6">
+            <div class="font-semibold" id="profile-name">Member</div>
+            <div class="text-gray-500" id="profile-email-2">—</div>
+
+            <p id="profile-status" class="text-sm mt-4 text-gray-500"></p>
+          </div>
         </div>
-      </aside>
+      </section>
 
-      <main>
-        <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-7">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 class="text-3xl font-bold">Your meet4 space</h1>
-              <p class="mt-2 text-textMuted">
-                Browse hangs near you, or host something simple. (UI-ready; features can plug in next.)
-              </p>
-            </div>
-            <div class="flex gap-3">
-              <button
-                id="primary-action"
-                type="button"
-                class="px-5 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition shadow-lg"
-              >
-                ➕ Host a hang
-              </button>
-              <button
-                id="secondary-action"
-                type="button"
-                class="px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition font-semibold"
-              >
-                🗺️ Open map
-              </button>
-            </div>
-          </div>
-
-          <div class="mt-6 flex flex-wrap gap-2">
-            <button class="px-4 py-2 rounded-full bg-accentSoft text-textDark font-semibold text-sm border border-emerald-100">Today</button>
-            <button class="px-4 py-2 rounded-full bg-white text-textMuted font-semibold text-sm border border-gray-200 hover:bg-gray-50 transition">Tomorrow</button>
-            <button class="px-4 py-2 rounded-full bg-white text-textMuted font-semibold text-sm border border-gray-200 hover:bg-gray-50 transition">Coffee</button>
-            <button class="px-4 py-2 rounded-full bg-white text-textMuted font-semibold text-sm border border-gray-200 hover:bg-gray-50 transition">Walk</button>
-            <button class="px-4 py-2 rounded-full bg-white text-textMuted font-semibold text-sm border border-gray-200 hover:bg-gray-50 transition">Games</button>
-          </div>
-        </section>
-
-        <section class="mt-8">
-          <!-- MAP -->
-          <div id="view-map" class="view">
-            <div class="grid md:grid-cols-3 gap-6">
-              <div class="md:col-span-2 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-gray-200 flex items-center justify-between">
-                  <div>
-                    <h2 class="text-xl font-semibold">Nearby map</h2>
-                    <p class="text-sm text-textMuted">Drop your real map here later (Mapbox/Google/etc.).</p>
-                  </div>
-                  <span class="text-sm font-semibold text-textMuted">Preview</span>
-                </div>
-                <div class="h-80 bg-gradient-to-br from-accentSoft to-white flex items-center justify-center text-textMuted">
-                  Map placeholder
-                </div>
-              </div>
-
-              <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-                <h3 class="text-lg font-semibold">Hangs today</h3>
-                <p class="mt-1 text-sm text-textMuted">Example cards (replace with real data).</p>
-
-                <div class="mt-4 space-y-3">
-                  <div class="p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
-                    <div class="font-semibold">☕ Coffee + chat</div>
-                    <div class="text-sm text-textMuted">30–45 mins · 1.2 km · 3 spots</div>
-                  </div>
-                  <div class="p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
-                    <div class="font-semibold">🚶 Walk in the park</div>
-                    <div class="text-sm text-textMuted">60 mins · 2.4 km · 5 spots</div>
-                  </div>
-                  <div class="p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
-                    <div class="font-semibold">🎲 Board games</div>
-                    <div class="text-sm text-textMuted">90 mins · 3.1 km · 4 spots</div>
-                  </div>
-                </div>
-
-                <button class="mt-5 w-full py-3 rounded-xl bg-textDark text-white font-semibold hover:opacity-90 transition" disabled>
-                  Real search coming soon
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- HANGS -->
-          <div id="view-hangs" class="view hidden">
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-              <h2 class="text-2xl font-bold">Hangs</h2>
-              <p class="mt-2 text-textMuted">A clean list view that matches your landing style.</p>
-
-              <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="p-6 rounded-2xl border border-gray-200 hover:bg-gray-50 transition">
-                  <div class="text-4xl mb-3">☕</div>
-                  <div class="font-semibold text-lg">Coffee hang</div>
-                  <div class="text-sm text-textMuted mt-1">Today · 4:30pm · 1.2 km</div>
-                  <button class="mt-4 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition" disabled>
-                    Join (soon)
-                  </button>
-                </div>
-
-                <div class="p-6 rounded-2xl border border-gray-200 hover:bg-gray-50 transition">
-                  <div class="text-4xl mb-3">🚶</div>
-                  <div class="font-semibold text-lg">Evening walk</div>
-                  <div class="text-sm text-textMuted mt-1">Today · 6:00pm · 2.4 km</div>
-                  <button class="mt-4 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition" disabled>
-                    Join (soon)
-                  </button>
-                </div>
-
-                <div class="p-6 rounded-2xl border border-gray-200 hover:bg-gray-50 transition">
-                  <div class="text-4xl mb-3">🎲</div>
-                  <div class="font-semibold text-lg">Board games</div>
-                  <div class="text-sm text-textMuted mt-1">Tomorrow · 7:00pm · 3.1 km</div>
-                  <button class="mt-4 w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition" disabled>
-                    Join (soon)
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- HOST -->
-          <div id="view-host" class="view hidden">
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-              <h2 class="text-2xl font-bold">Host a hang</h2>
-              <p class="mt-2 text-textMuted">This is styled like your auth card — ready to wire up.</p>
-
-              <form class="mt-6 grid md:grid-cols-2 gap-5" onsubmit="event.preventDefault();">
-                <div>
-                  <label class="block text-sm font-medium text-textMuted mb-2">What are you doing?</label>
-                  <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                         placeholder="Coffee, walk, games…" />
-                </div>
-
-                <div>
-                  <label class="block text-sm font-medium text-textMuted mb-2">When?</label>
-                  <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                         placeholder="Today 6pm" />
-                </div>
-
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-medium text-textMuted mb-2">Where?</label>
-                  <input class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                         placeholder="A simple meetup spot" />
-                </div>
-
-                <div class="md:col-span-2">
-                  <button class="w-full py-4 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition shadow-lg" disabled>
-                    Create hang (coming soon)
-                  </button>
-                  <p class="mt-3 text-sm text-textMuted text-center">Hook this to your database next.</p>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- PROFILE -->
-          <div id="view-profile" class="view hidden">
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <h2 class="text-2xl font-bold">Profile</h2>
-                  <p class="mt-2 text-textMuted">Edit your basics. Avatar uploads are private + signed.</p>
-                </div>
-                <div class="text-sm text-textMuted" id="profile-status"></div>
-              </div>
-
-              <div class="mt-6 grid lg:grid-cols-3 gap-6">
-                <!-- Left: identity card -->
-                <div class="lg:col-span-1 p-6 rounded-2xl border border-gray-200">
-                  <div class="flex items-center gap-4">
-                    <div class="relative">
-                      <img id="profile-avatar-img"
-                           class="w-16 h-16 rounded-full object-cover border border-gray-200 hidden"
-                           alt="Avatar"/>
-                      <div id="profile-avatar-fallback"
-                           class="w-16 h-16 rounded-full bg-accentSoft flex items-center justify-center text-primary font-bold text-2xl border border-emerald-100">
-                        M
-                      </div>
-                    </div>
-
-                    <div class="min-w-0">
-                      <div class="font-semibold truncate" id="profile-name">Member</div>
-                      <div class="text-sm text-textMuted truncate" id="profile-email-3">—</div>
-                      <div class="text-xs text-textMuted mt-1" id="profile-gender-label">—</div>
-                    </div>
-                  </div>
-
-                  <div class="mt-5">
-                    <input id="avatar-file" type="file" accept="image/*" class="hidden" />
-                    <button id="avatar-pick-btn"
-                            class="w-full py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition font-semibold">
-                      📷 Upload / change photo
-                    </button>
-                    <button id="avatar-remove-btn"
-                            class="mt-2 w-full py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition font-semibold text-red-600">
-                      Remove photo
-                    </button>
-                    <p class="mt-3 text-xs text-textMuted">
-                      Stored privately in <span class="font-semibold">avatars/&lt;your-id&gt;/</span>
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Right: editor -->
-                <div class="lg:col-span-2 p-6 rounded-2xl border border-gray-200">
-                  <div class="grid md:grid-cols-2 gap-5">
-                    <div class="md:col-span-1">
-                      <label class="block text-sm font-medium text-textMuted mb-2">Display name</label>
-                      <input id="display-name-input"
-                             maxlength="40"
-                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                             placeholder="e.g. Barry" />
-                      <div class="mt-1 text-xs text-textMuted"><span id="dn-count">0</span>/40</div>
-                    </div>
-
-                    <div class="md:col-span-1">
-                      <label class="block text-sm font-medium text-textMuted mb-2">Identity</label>
-                      <div class="grid grid-cols-5 gap-2" id="gender-grid">
-                        <!-- buttons inserted by JS -->
-                      </div>
-                      <div class="mt-2 text-xs text-textMuted">Pick one. (You can rename these later.)</div>
-                    </div>
-
-                    <div class="md:col-span-2">
-                      <label class="block text-sm font-medium text-textMuted mb-2">Bio</label>
-                      <textarea id="bio-input"
-                                maxlength="240"
-                                rows="4"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                                placeholder="A couple of lines. Keep it light."></textarea>
-                      <div class="mt-1 text-xs text-textMuted"><span id="bio-count">0</span>/240</div>
-                    </div>
-
-                    <div class="md:col-span-2 flex flex-col sm:flex-row gap-3">
-                      <button id="profile-save-btn"
-                              class="flex-1 py-4 rounded-xl bg-primary text-white font-semibold hover:bg-primaryDark transition shadow-lg">
-                        Save profile
-                      </button>
-                      <button id="logout-btn-2"
-                              class="flex-1 py-4 rounded-xl bg-textDark text-white font-semibold hover:opacity-90 transition">
-                        Log out
-                      </button>
-                    </div>
-
-                    <div class="md:col-span-2">
-                      <a href="./index.html" class="block text-center text-sm text-primary hover:underline">
-                        Back to landing
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </section>
-      </main>
-    </div>
+    </main>
   </div>
 
-  <!-- Bottom tab bar (mobile) -->
-  <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-bottom z-50">
-    <div class="max-w-7xl mx-auto px-6 py-2 grid grid-cols-4 gap-2">
-      <button data-tab="map" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
-        <span class="text-xl">🗺️</span><span>Map</span>
-      </button>
-      <button data-tab="hangs" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
-        <span class="text-xl">📌</span><span>Hangs</span>
-      </button>
-      <button data-tab="host" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
-        <span class="text-xl">➕</span><span>Host</span>
-      </button>
-      <button data-tab="profile" class="tab-btn-mobile py-2 rounded-xl hover:bg-gray-50 transition text-sm font-semibold flex flex-col items-center">
-        <span class="text-xl">👤</span><span>Me</span>
-      </button>
-    </div>
-  </nav>
-
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
   <script>
-    // Supabase config
+    // CONFIG
     const SUPABASE_URL = "https://hvzyndiuxivlwfjcvdls.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GPbzWptNICdVPlKN-WllCQ_b5eGw83c";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // IMPORTANT: renamed to avoid redeclaration bug
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // DOM
     const sessionLine = document.getElementById("session-line");
     const profileEmail = document.getElementById("profile-email");
     const profileEmail2 = document.getElementById("profile-email-2");
-    const profileEmail3 = document.getElementById("profile-email-3");
+    const profileName = document.getElementById("profile-name");
+    const profileStatus = document.getElementById("profile-status");
 
     const logoutBtn = document.getElementById("logout-btn");
-    const logoutBtn2 = document.getElementById("logout-btn-2");
-    const goLandingBtn = document.getElementById("go-landing-btn");
 
-    const profileBtn = document.getElementById("profile-btn");
-    const profileMenu = document.getElementById("profile-menu");
+    // AUTH GUARD
+    async function requireAuth() {
+      const { data: { session } } = await sb.auth.getSession();
 
-    const topbarBadge = document.getElementById("topbar-badge");
-
-    // Profile editor DOM
-    const profileStatus = document.getElementById("profile-status");
-    const profileName = document.getElementById("profile-name");
-    const dnInput = document.getElementById("display-name-input");
-    const bioInput = document.getElementById("bio-input");
-    const dnCount = document.getElementById("dn-count");
-    const bioCount = document.getElementById("bio-count");
-    const profileSaveBtn = document.getElementById("profile-save-btn");
-    const genderGrid = document.getElementById("gender-grid");
-    const genderLabel = document.getElementById("profile-gender-label");
-
-    const avatarPickBtn = document.getElementById("avatar-pick-btn");
-    const avatarRemoveBtn = document.getElementById("avatar-remove-btn");
-    const avatarFile = document.getElementById("avatar-file");
-    const avatarImg = document.getElementById("profile-avatar-img");
-    const avatarFallback = document.getElementById("profile-avatar-fallback");
-
-    // Simple routing
-    function goToAuth() {
-      window.location.href = "./index.html#auth";
-    }
-
-    // Tabs
-    const views = {
-      map: document.getElementById("view-map"),
-      hangs: document.getElementById("view-hangs"),
-      host: document.getElementById("view-host"),
-      profile: document.getElementById("view-profile"),
-    };
-
-    function setActiveTab(tab) {
-      Object.entries(views).forEach(([k, el]) => el.classList.toggle("hidden", k !== tab));
-
-      document.querySelectorAll(".tab-btn").forEach(btn => {
-        const active = btn.dataset.tab === tab;
-        btn.classList.toggle("bg-accentSoft", active);
-        btn.classList.toggle("text-textDark", active);
-      });
-      document.querySelectorAll(".tab-btn-mobile").forEach(btn => {
-        const active = btn.dataset.tab === tab;
-        btn.classList.toggle("bg-accentSoft", active);
-      });
-
-      history.replaceState(null, "", `#${tab}`);
-    }
-
-    document.querySelectorAll("[data-tab]").forEach(btn => {
-      btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
-    });
-
-    const initialTab = (location.hash || "#map").replace("#", "");
-    setActiveTab(views[initialTab] ? initialTab : "map");
-
-    // Dropdown
-    function closeMenu() {
-      profileMenu.classList.add("hidden");
-      profileBtn.setAttribute("aria-expanded", "false");
-    }
-    function toggleMenu() {
-      const isHidden = profileMenu.classList.contains("hidden");
-      profileMenu.classList.toggle("hidden", !isHidden);
-      profileBtn.setAttribute("aria-expanded", String(isHidden));
-    }
-    profileBtn.addEventListener("click", toggleMenu);
-    document.addEventListener("click", (e) => {
-      if (!profileMenu.contains(e.target) && !profileBtn.contains(e.target)) closeMenu();
-    });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeMenu();
-    });
-
-    goLandingBtn.addEventListener("click", () => (window.location.href = "./index.html"));
-
-    async function doLogout() {
-      logoutBtn.disabled = true;
-      logoutBtn2.disabled = true;
-      await supabase.auth.signOut();
-      goToAuth();
-    }
-    logoutBtn.addEventListener("click", doLogout);
-    logoutBtn2.addEventListener("click", doLogout);
-
-    // UI helpers
-    function setStatus(msg, kind = "muted") {
-      profileStatus.textContent = msg || "";
-      profileStatus.className = kind === "error"
-        ? "text-sm text-red-600"
-        : kind === "ok"
-        ? "text-sm text-primary"
-        : "text-sm text-textMuted";
-    }
-
-    function setInitialBadgeFromEmail(email) {
-      const initial = (email?.[0] || "M").toUpperCase();
-      topbarBadge.textContent = initial;
-      avatarFallback.textContent = initial;
-    }
-
-    function setAvatarVisible(urlOrNull) {
-      if (urlOrNull) {
-        avatarImg.src = urlOrNull;
-        avatarImg.classList.remove("hidden");
-        avatarFallback.classList.add("hidden");
-      } else {
-        avatarImg.removeAttribute("src");
-        avatarImg.classList.add("hidden");
-        avatarFallback.classList.remove("hidden");
-      }
-    }
-
-    // Gender options (can change later)
-    const GENDERS = [
-      { code: "male", label: "Male", icon: "♂️" },
-      { code: "female", label: "Female", icon: "♀️" },
-      { code: "nonbinary", label: "Non-binary", icon: "⚧️" },
-      { code: "robot", label: "Robot", icon: "🤖" },
-      { code: "octopus", label: "Octopus", icon: "🐙" },
-    ];
-    let selectedGender = null;
-
-    function renderGenderButtons() {
-      genderGrid.innerHTML = "";
-      for (const g of GENDERS) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className =
-          "px-3 py-3 rounded-xl border text-sm font-semibold transition flex items-center justify-center " +
-          (selectedGender === g.code
-            ? "bg-accentSoft border-emerald-200"
-            : "bg-white border-gray-200 hover:bg-gray-50");
-        btn.title = g.label;
-        btn.textContent = g.icon;
-        btn.addEventListener("click", () => {
-          selectedGender = g.code;
-          genderLabel.textContent = g.label;
-          renderGenderButtons();
-        });
-        genderGrid.appendChild(btn);
-      }
-    }
-
-    dnInput.addEventListener("input", () => dnCount.textContent = String(dnInput.value.length));
-    bioInput.addEventListener("input", () => bioCount.textContent = String(bioInput.value.length));
-
-    // ---- Data layer ----
-    // If your table name is actually "Profiles" (rare), change "profiles" to "Profiles" below.
-    const PROFILES_TABLE = "profiles";
-    const AVATAR_BUCKET = "avatars";
-
-    async function getSessionUserOrRedirect() {
-      const { data: { session } } = await supabase.auth.getSession();
-      const user = session?.user;
-      if (!user) {
-        goToAuth();
-        return null;
-      }
-      return user;
-    }
-
-    async function ensureProfileRow(user) {
-      // Try load
-      const { data: existing, error: selErr } = await supabase
-        .from(PROFILES_TABLE)
-        .select("id, display_name, bio, gender_code, avatar_url, created_at, updated_at")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      if (selErr) throw selErr;
-
-      if (existing) return existing;
-
-      // Insert minimal row (RLS allows if id matches auth.uid())
-      const insertPayload = {
-        id: user.id,
-        display_name: null,
-        bio: null,
-        gender_code: null,
-        avatar_url: null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      const { data: inserted, error: insErr } = await supabase
-        .from(PROFILES_TABLE)
-        .insert(insertPayload)
-        .select("id, display_name, bio, gender_code, avatar_url, created_at, updated_at")
-        .single();
-
-      if (insErr) throw insErr;
-      return inserted;
-    }
-
-    async function saveProfile(user) {
-      const display_name = dnInput.value.trim() || null;
-      const bio = bioInput.value.trim() || null;
-      const gender_code = selectedGender || null;
-
-      setStatus("Saving…");
-
-      const { error } = await supabase
-        .from(PROFILES_TABLE)
-        .update({
-          display_name,
-          bio,
-          gender_code,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", user.id);
-
-      if (error) throw error;
-
-      profileName.textContent = display_name || "Member";
-      genderLabel.textContent = (GENDERS.find(g => g.code === gender_code)?.label) || "—";
-      setStatus("Saved.", "ok");
-      setTimeout(() => setStatus(""), 1500);
-    }
-
-    function extFromMimeOrName(file) {
-      const mime = (file.type || "").toLowerCase();
-      if (mime.includes("png")) return "png";
-      if (mime.includes("jpeg") || mime.includes("jpg")) return "jpg";
-      if (mime.includes("webp")) return "webp";
-      // fallback from filename
-      const parts = (file.name || "").split(".");
-      return (parts.length > 1 ? parts.pop().toLowerCase() : "jpg");
-    }
-
-    async function refreshAvatarSignedUrl(avatarPath) {
-      if (!avatarPath) {
-        setAvatarVisible(null);
+      if (!session?.user) {
+        window.location.href = "./index.html#auth";
         return;
       }
-      // 1 hour signed URL
-      const { data, error } = await supabase
-        .storage
-        .from(AVATAR_BUCKET)
-        .createSignedUrl(avatarPath, 3600);
 
-      if (error) {
-        // If signed URL fails, still keep UI usable
-        console.warn("Signed URL error:", error);
-        setAvatarVisible(null);
-        return;
-      }
-      setAvatarVisible(data.signedUrl);
-    }
+      const email = session.user.email;
 
-    async function uploadAvatar(user, file) {
-      setStatus("Uploading photo…");
-
-      const ext = extFromMimeOrName(file);
-      const avatarPath = `${user.id}/avatar.${ext}`; // must be inside <user_id>/ for your policies
-
-      // Upload with upsert so it replaces
-      const { error: upErr } = await supabase
-        .storage
-        .from(AVATAR_BUCKET)
-        .upload(avatarPath, file, {
-          upsert: true,
-          contentType: file.type || undefined,
-          cacheControl: "3600",
-        });
-
-      if (upErr) throw upErr;
-
-      // Save path into profile
-      const { error: profErr } = await supabase
-        .from(PROFILES_TABLE)
-        .update({
-          avatar_url: avatarPath,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", user.id);
-
-      if (profErr) throw profErr;
-
-      await refreshAvatarSignedUrl(avatarPath);
-
-      setStatus("Photo updated.", "ok");
-      setTimeout(() => setStatus(""), 1500);
-    }
-
-    async function removeAvatar(user) {
-      setStatus("Removing photo…");
-
-      // Load current avatar path
-      const { data: row, error: selErr } = await supabase
-        .from(PROFILES_TABLE)
-        .select("avatar_url")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      if (selErr) throw selErr;
-
-      const avatarPath = row?.avatar_url;
-      if (avatarPath) {
-        // Remove from storage
-        const { error: delErr } = await supabase
-          .storage
-          .from(AVATAR_BUCKET)
-          .remove([avatarPath]);
-
-        if (delErr) throw delErr;
-      }
-
-      // Clear profile field
-      const { error: updErr } = await supabase
-        .from(PROFILES_TABLE)
-        .update({ avatar_url: null, updated_at: new Date().toISOString() })
-        .eq("id", user.id);
-
-      if (updErr) throw updErr;
-
-      setAvatarVisible(null);
-      setStatus("Photo removed.", "ok");
-      setTimeout(() => setStatus(""), 1500);
-    }
-
-    async function hydrateProfileUI(user) {
-      const email = user.email || "Signed in";
       sessionLine.textContent = `Signed in as ${email}`;
       profileEmail.textContent = email;
       profileEmail2.textContent = email;
-      profileEmail3.textContent = email;
-      setInitialBadgeFromEmail(email);
 
-      setStatus("Loading profile…");
-
-      const profile = await ensureProfileRow(user);
-
-      dnInput.value = profile.display_name || "";
-      bioInput.value = profile.bio || "";
-      dnCount.textContent = String(dnInput.value.length);
-      bioCount.textContent = String(bioInput.value.length);
-
-      selectedGender = profile.gender_code || null;
-      genderLabel.textContent = (GENDERS.find(g => g.code === selectedGender)?.label) || "—";
-      renderGenderButtons();
-
-      profileName.textContent = profile.display_name || "Member";
-
-      await refreshAvatarSignedUrl(profile.avatar_url);
-
-      setStatus("");
+      loadProfile(session.user.id);
     }
 
-    // Top buttons to tabs
-    document.getElementById("primary-action").addEventListener("click", () => setActiveTab("host"));
-    document.getElementById("secondary-action").addEventListener("click", () => setActiveTab("map"));
+    // LOAD PROFILE DATA
+    async function loadProfile(userId) {
 
-    // Profile actions
-    profileSaveBtn.addEventListener("click", async () => {
-      try {
-        const user = await getSessionUserOrRedirect();
-        if (!user) return;
-        await saveProfile(user);
-      } catch (e) {
-        console.error(e);
-        setStatus(`Save failed: ${e.message || e}`, "error");
+      profileStatus.textContent = "Loading profile…";
+
+      const { data, error } = await sb
+        .from("Profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+      if (error) {
+        profileStatus.textContent = "No profile yet. Will create automatically.";
+        createProfile(userId);
+        return;
       }
-    });
 
-    avatarPickBtn.addEventListener("click", () => avatarFile.click());
-    avatarFile.addEventListener("change", async () => {
-      try {
-        const file = avatarFile.files?.[0];
-        if (!file) return;
-        const user = await getSessionUserOrRedirect();
-        if (!user) return;
-
-        // basic size guard (optional)
-        if (file.size > 5 * 1024 * 1024) {
-          setStatus("Image too large (max 5MB).", "error");
-          return;
-        }
-
-        await uploadAvatar(user, file);
-      } catch (e) {
-        console.error(e);
-        setStatus(`Upload failed: ${e.message || e}`, "error");
-      } finally {
-        avatarFile.value = "";
-      }
-    });
-
-    avatarRemoveBtn.addEventListener("click", async () => {
-      try {
-        const user = await getSessionUserOrRedirect();
-        if (!user) return;
-        await removeAvatar(user);
-      } catch (e) {
-        console.error(e);
-        setStatus(`Remove failed: ${e.message || e}`, "error");
-      }
-    });
-
-    // Auth guard + hydrate
-    async function requireAuthAndInit() {
-      const user = await getSessionUserOrRedirect();
-      if (!user) return;
-      await hydrateProfileUI(user);
+      profileName.textContent = data.display_name || "Member";
+      profileStatus.textContent = "Profile loaded";
     }
 
-    supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!session?.user) return goToAuth();
-      try {
-        await hydrateProfileUI(session.user);
-      } catch (e) {
-        console.error(e);
-        setStatus(`Profile load failed: ${e.message || e}`, "error");
-      }
+    async function createProfile(userId) {
+      await sb.from("Profiles").insert({ id: userId });
+      profileStatus.textContent = "Profile created.";
+    }
+
+    // LOGOUT
+    logoutBtn.addEventListener("click", async () => {
+      await sb.auth.signOut();
+      window.location.href = "./index.html#auth";
     });
 
-    requireAuthAndInit();
+    // TAB SWITCHING
+    const views = {
+      profile: document.getElementById("view-profile")
+    };
+
+    document.querySelectorAll("[data-tab]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        Object.values(views).forEach(v => v.classList.add("hidden"));
+        if (views[btn.dataset.tab]) views[btn.dataset.tab].classList.remove("hidden");
+      });
+    });
+
+    // START
+    requireAuth();
   </script>
+
 </body>
 </html>
