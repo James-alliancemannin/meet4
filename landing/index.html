@@ -90,17 +90,19 @@
           <h3 class="text-2xl font-bold text-center mb-6">Join the beta now</h3>
           <p class="text-center text-textMuted mb-8">Create an account today — even in early beta, you'll be first to access real local hangs.</p>
 
-          <div class="flex gap-3 mb-6">
-            <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">Create account</button>
-            <button id="tab-login" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary">Log in</button>
+          <div id="auth-chooser" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            <button id="open-signup" type="button" class="w-full py-3 rounded-xl font-semibold bg-primary text-white hover:bg-primaryDark transition">Sign up</button>
+            <button id="open-login" type="button" class="w-full py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textDark hover:bg-gray-50 transition">Log in</button>
           </div>
 
-          <p class="text-center text-sm mb-6">
-            <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">Forgot your password?</button>
-          </p>
+          <div id="auth-panels" class="hidden">
+            <div class="flex gap-3 mb-6">
+              <button id="tab-signup" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-accentSoft text-textDark focus:outline-none focus:ring-2 focus:ring-primary">Create account</button>
+              <button id="tab-login" type="button" class="flex-1 py-3 rounded-xl font-semibold border border-gray-200 bg-white text-textMuted hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary">Log in</button>
+            </div>
 
-          <!-- SIGN UP -->
-          <form id="signup-form" novalidate>
+            <!-- SIGN UP -->
+            <form id="signup-form" novalidate>
             <div class="mb-5">
               <label for="signup-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
               <input type="email" id="signup-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
@@ -110,10 +112,10 @@
               <input type="password" id="signup-password" minlength="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="At least 6 characters" autocomplete="new-password" />
             </div>
             <button id="signup-btn" type="button" class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg">Create account</button>
-          </form>
+            </form>
 
-          <!-- LOGIN -->
-          <form id="login-form" class="hidden" novalidate>
+            <!-- LOGIN -->
+            <form id="login-form" class="hidden" novalidate>
             <div class="mb-5">
               <label for="login-email" class="block text-sm font-medium text-textMuted mb-2">Email</label>
               <input type="email" id="login-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
@@ -123,7 +125,24 @@
               <input type="password" id="login-password" minlength="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Your password" autocomplete="current-password" />
             </div>
             <button id="login-btn" type="button" class="w-full py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primaryDark transition shadow-lg text-lg">Log in</button>
-          </form>
+            </form>
+
+            <p class="text-center text-sm mt-5 mb-2">
+              <button id="forgot-btn" type="button" class="text-primary hover:underline font-medium">Forgot your password?</button>
+            </p>
+
+            <form id="forgot-form" class="hidden mt-3" novalidate>
+              <label for="forgot-email" class="block text-sm font-medium text-textMuted mb-2">Email for reset link</label>
+              <div class="flex gap-2">
+                <input type="email" id="forgot-email" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="you@example.com" autocomplete="email" />
+                <button id="forgot-submit" type="button" class="px-4 py-3 bg-textDark text-white font-semibold rounded-lg hover:opacity-90 transition">Send</button>
+              </div>
+            </form>
+
+            <p class="text-center text-xs mt-4">
+              <button id="choose-again" type="button" class="text-textMuted hover:underline">Choose sign up or log in again</button>
+            </p>
+          </div>
 
           <div id="auth-status" class="status info mt-6"></div>
           <p class="text-center text-sm text-textMuted mt-6">Tip: If you just created an account, you may need to confirm your email first.</p>
@@ -149,6 +168,11 @@
       const $ = id => document.getElementById(id);
 
       const statusBox = $("auth-status");
+      const authChooser = $("auth-chooser");
+      const authPanels = $("auth-panels");
+      const openSignup = $("open-signup");
+      const openLogin = $("open-login");
+      const chooseAgain = $("choose-again");
       const tabSignup = $("tab-signup");
       const tabLogin = $("tab-login");
       const signupForm = $("signup-form");
@@ -156,6 +180,8 @@
       const signupBtn = $("signup-btn");
       const loginBtn = $("login-btn");
       const forgotBtn = $("forgot-btn");
+      const forgotForm = $("forgot-form");
+      const forgotSubmit = $("forgot-submit");
 
       function showStatus(type, msg) {
         if (!statusBox) return alert(msg);
@@ -165,7 +191,7 @@
       }
 
       // Safety check
-      if (!tabSignup || !signupBtn || !forgotBtn) {
+      if (!tabSignup || !signupBtn || !forgotBtn || !openSignup || !openLogin) {
         showStatus("err", "Critical error: Auth elements missing. Hard refresh (Ctrl+Shift+R) or re-upload the file.");
         console.error("Missing elements - check HTML");
         return;
@@ -179,11 +205,29 @@
       function setTab(isSignup) {
         signupForm.classList.toggle("hidden", !isSignup);
         loginForm.classList.toggle("hidden", isSignup);
+        tabSignup.classList.toggle("bg-accentSoft", isSignup);
+        tabSignup.classList.toggle("text-textDark", isSignup);
+        tabLogin.classList.toggle("bg-accentSoft", !isSignup);
+        tabLogin.classList.toggle("text-textDark", !isSignup);
+        tabLogin.classList.toggle("text-textMuted", isSignup);
       }
+
+      function openAuth(mode = "signup") {
+        authChooser.classList.add("hidden");
+        authPanels.classList.remove("hidden");
+        setTab(mode !== "login");
+      }
+
+      openSignup.addEventListener("click", () => openAuth("signup"));
+      openLogin.addEventListener("click", () => openAuth("login"));
+      chooseAgain?.addEventListener("click", () => {
+        authPanels.classList.add("hidden");
+        authChooser.classList.remove("hidden");
+        forgotForm.classList.add("hidden");
+      });
 
       tabSignup.addEventListener("click", () => setTab(true));
       tabLogin.addEventListener("click", () => setTab(false));
-      setTab(true);
 
       // CREATE ACCOUNT
       signupBtn.addEventListener("click", async () => {
@@ -241,9 +285,16 @@
       });
 
       // FORGOT PASSWORD
-      forgotBtn.addEventListener("click", async () => {
-        console.log("Forgot password clicked");
-        const email = prompt("Enter your email address to receive a reset link:\n(We'll send it only if the account exists)");
+      forgotBtn.addEventListener("click", () => {
+        forgotForm.classList.toggle("hidden");
+        if (!forgotForm.classList.contains("hidden")) {
+          $("forgot-email").value = $("login-email").value.trim() || "";
+          $("forgot-email").focus();
+        }
+      });
+
+      forgotSubmit.addEventListener("click", async () => {
+        const email = $("forgot-email").value.trim();
 
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           showStatus("err", "Please enter a valid email address.");
@@ -260,6 +311,7 @@
           showStatus("err", error.message);
         } else {
           showStatus("ok", "If an account exists, a reset link has been sent. Check inbox and spam.");
+          forgotForm.classList.add("hidden");
         }
       });
 
@@ -294,3 +346,4 @@
 
 </body>
 </html>
+
